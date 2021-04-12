@@ -21,6 +21,8 @@ claim_luck = 3
 
 username = input("Enter username: ")
 
+gift_codes = ["S19N"]
+
 if not os.path.exists('assets/users'):
     os.mkdir('assets/users')
 elif os.path.exists('assets/users'):
@@ -30,7 +32,7 @@ elif os.path.exists('assets/users'):
 def initiateProgram():
     progress = 0
     for i in range(100):
-        progress = progress + 1 * 10
+        progress = progress + 1 * 20
         print('Loading...' + str(progress) + '%')
         time.sleep(.04)
 
@@ -63,11 +65,11 @@ def depos():
         print('\nERROR: You cannot deposit more than what you have!\nYour point balance is: {}\n'.format(points))
     elif int(deposit_in_bank) < 1:
         print('\nERROR: You cannot deposit any points below 1!\nYour point balance is: {}\n'.format(points))
-    
-    deposit = deposit + int(deposit_in_bank)
-    points = points - int(deposit_in_bank)
+    else:
+        deposit = deposit + int(deposit_in_bank)
+        points = points - int(deposit_in_bank)
 
-    print('\nPoint balance: {0}\nDeposited: {1}\n'.format(points, deposit))
+        print('\nPoint balance: {0}\nDeposited: {1}\n'.format(points, deposit))
 
 def withdraw():
     global points
@@ -84,11 +86,22 @@ def withdraw():
         deposit = deposit - int(withdraw_from_bank)
         print('\nYour current point balance: {0}\nYour deposited points: {1}\n'.format(points, deposit))
 
+def gift_code():
+    global username
+    global points
+    code = input("Enter gift code.\n{}: ".format(username))
+    if code in gift_codes:
+        points = points + 400
+        print('You have been gifted some points!\nYour total point balance is {}.'.format(points))
+        gift_codes.remove(code)
+    elif code not in gift_codes:
+        print('This is not a valid gift code!')
+
 
 def console():
     global username
-    global deposit
     global points
+    global deposit
     global claim_luck
     while True:
         terminal = input(username + ": ")
@@ -96,7 +109,7 @@ def console():
         if terminal == slash:
             print('This is the only command prefix. Slash commands are availabe in this script.\nType \"/help\" to see all available commands.')
         elif terminal == slash + 'help':
-            print('\nAvailable commands:\n/balance - Check your point balance and deposited points.\n/claim - Claim 50 points.\n/deposit - Deposit your points.\n/load - Load your saved data (data is based on username).\n/logout - Closes the program.\n/save - Save your data (data is based on username).\n/withdraw - Withdraw your points.\n')
+            print('\nAvailable commands:\n/balance - Check your point balance and deposited points.\n/claim - Claim 50 points.\n/deposit - Deposit your points.\n/gift - Enter a gift code to receive some points.\n/load - Load your saved data (data is based on username).\n/logout - Closes the program.\n/save - Save your data (data is based on username).\n/withdraw - Withdraw your points.\n')
         elif terminal == slash + 'claim':
             reward()
         elif terminal == slash + 'balance':
@@ -122,15 +135,20 @@ def console():
                     print('Your data has been saved, {}!'.format(username))
 
         elif terminal == slash + 'load':
-            with open('assets/users/{}/save_data.json'.format(username), 'r+') as file:
-                data = json.load(file)
+            if not os.path.exists('assets/users/{}'.format(username)):
+                print('\nERROR: Saved data for ({}) is nowhere to be found in this program.\n'.format(username))
+            elif os.path.exists('assets/users/{}'.format(username)):
+                with open('assets/users/{}/save_data.json'.format(username), 'r+') as file:
+                    data = json.load(file)
 
-                username = data['username']
-                points = data['points']
-                deposit = data['deposit']
-                claim_luck = data['claim luck']
+                    username = data['username']
+                    points = data['points']
+                    deposit = data['deposit']
+                    claim_luck = data['claim luck']
 
-            print('All your data has been loaded, {}!'.format(username))
+                    print('All your data has been loaded, {}!'.format(username))
+        elif terminal == slash + 'gift':
+            gift_code()
         elif terminal == slash + 'logout':
             print('Logging out...')
             exit()
@@ -147,5 +165,6 @@ if int(initiate) == 1:
         print('You declined the bonus points, your point balance is {}.'.format(points))
 
     console()
+    
 elif int(initiate) == 2:
     print('Cancelled.')
