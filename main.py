@@ -23,6 +23,11 @@ def sign_in_function():
     sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
     if int(sign_in_option) == 1:
         username = input("[Sign-in] | Enter username: ")
+        if not os.path.exists('assets/users/{}/sign_in_data.json'.format(username)):
+            print("ERROR: '{}' isn't a registered user!".format(username))
+            exit()
+        elif os.path.exists('assets/users/{}/sign_in_data.json'.format(username)):
+            pass
         with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
             jsonData = json.load(file)
 
@@ -147,7 +152,7 @@ def gift_code():
         elif code != jsonData['code']:
             print('This is not a valid gift code!')
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{1}claim - Claim 50 points.\n{2}deposit - Deposit your points.\n{3}gift - Enter a gift code to receive some points.\n{4}load - Load your saved data (data is based on username).\n{5}logout - Closes the program.\n{6}save - Save your data (data is based on username).\n{7}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{8}update_password - Update your current password to a new password.\n{9}withdraw - Withdraw your points.\n'.format(slash, slash, slash, slash, slash, slash, slash, slash, slash, slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}save - Save your data (data is based on username).\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 
 def console():
