@@ -1,7 +1,7 @@
 {
     "username": "Nakajima, Suzuko",
-    "points": 50,
-    "deposit": 900,
+    "points": 10,
+    "deposit": 940,
     "claim luck": 2,
-    "slash command prefix": "./"
+    "slash command prefix": "/"
 }

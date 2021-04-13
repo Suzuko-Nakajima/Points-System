@@ -18,8 +18,45 @@ deposit = 0
 
 claim_luck = 3
 
+def sign_in_function():
+    global username
+    sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
+    if int(sign_in_option) == 1:
+        username = input("[Sign-in] | Enter username: ")
+        with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
+            jsonData = json.load(file)
 
-username = input("Enter username: ")
+            if username != jsonData['username']:
+                print('ERROR: Invalid username.')
+            elif username == jsonData['username']:
+                password = input("[Sign-in - {}] | Enter password: ".format(username))
+                if password != jsonData['password']:
+                    print('ERROR: Invalid password!')
+                elif password == jsonData['password']:
+                    print("Welcome back, {}!".format(username))
+    elif int(sign_in_option) == 2:
+        username = input("[Sign-up] | Enter username: ")
+        password = input("[Sign-up - {}] | Enter password: ".format(username))
+
+        if not os.path.exists('assets/users/{}'.format(username)):
+            os.mkdir('assets/users/{}'.format(username))
+        elif os.path.exists('assets/users/{}'.format(username)):
+            pass
+
+        sign_in_data = {
+            "username": username,
+            "password": password,
+            "user ID": id(username)
+            }
+
+        with open('assets/users/{}/sign_in_data.json'.format(username), 'w+') as file:
+            json.dump(sign_in_data, file, indent = 4, sort_keys = True)
+    
+
+
+sign_in_function()
+
+
 
 gift_codes = ["S19N"]
 
@@ -185,6 +222,5 @@ if int(initiate) == 1:
         print('\nYou declined the bonus points, your point balance is {}.'.format(points))
 
     console()
-    
 elif int(initiate) == 2:
     print('Cancelled.')
