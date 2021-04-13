@@ -132,12 +132,20 @@ def gift_code():
     global username
     global points
     code = input("Enter gift code.\n{}: ".format(username))
-    if code in gift_codes:
-        points = points + 400
-        print('\nYou have been gifted some points!\nYour total point balance is {}.'.format(points))
-        gift_codes.remove(code)
-    elif code not in gift_codes:
-        print('This is not a valid gift code!')
+
+    with open('giftcode.json', 'r+') as file:
+        jsonData = json.load(file)
+
+        if code == jsonData['code']:
+            points = points + 750
+            print('You have received extra points!\nYour new total is points is: {}'.format(points))
+
+            used_code = {}
+
+            with open('giftcode.json', 'w+') as file:
+                json.dump(used_code, file)
+        elif code != jsonData['code']:
+            print('This is not a valid gift code!')
 def command_help():
     print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{1}claim - Claim 50 points.\n{2}deposit - Deposit your points.\n{3}gift - Enter a gift code to receive some points.\n{4}load - Load your saved data (data is based on username).\n{5}logout - Closes the program.\n{6}save - Save your data (data is based on username).\n{7}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{8}withdraw - Withdraw your points.\n'.format(slash, slash, slash, slash, slash, slash, slash, slash, slash))
 
