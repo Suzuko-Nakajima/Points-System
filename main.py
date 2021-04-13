@@ -28,10 +28,12 @@ def sign_in_function():
 
             if username != jsonData['username']:
                 print('ERROR: Invalid username.')
+                exit()
             elif username == jsonData['username']:
                 password = input("[Sign-in - {}] | Enter password: ".format(username))
                 if password != jsonData['password']:
                     print('ERROR: Invalid password!')
+                    exit()
                 elif password == jsonData['password']:
                     print("Welcome back, {}!".format(username))
     elif int(sign_in_option) == 2:
