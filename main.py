@@ -45,6 +45,9 @@ def sign_in_function():
         elif os.path.exists('assets/users/{}'.format(username)):
             pass
 
+        with open('assets/users/{}/save_data.json'.format(username), 'x') as file:
+            file.close()
+
         sign_in_data = {
             "username": username,
             "password": password,
