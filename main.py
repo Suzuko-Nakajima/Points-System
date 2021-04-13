@@ -147,7 +147,7 @@ def gift_code():
         elif code != jsonData['code']:
             print('This is not a valid gift code!')
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{1}claim - Claim 50 points.\n{2}deposit - Deposit your points.\n{3}gift - Enter a gift code to receive some points.\n{4}load - Load your saved data (data is based on username).\n{5}logout - Closes the program.\n{6}save - Save your data (data is based on username).\n{7}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{8}withdraw - Withdraw your points.\n'.format(slash, slash, slash, slash, slash, slash, slash, slash, slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{1}claim - Claim 50 points.\n{2}deposit - Deposit your points.\n{3}gift - Enter a gift code to receive some points.\n{4}load - Load your saved data (data is based on username).\n{5}logout - Closes the program.\n{6}save - Save your data (data is based on username).\n{7}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{8}update_password - Update your current password to a new password.\n{9}withdraw - Withdraw your points.\n'.format(slash, slash, slash, slash, slash, slash, slash, slash, slash, slash))
 
 
 def console():
@@ -222,6 +222,30 @@ def console():
                 print('Your slash command prefix has been updated to: {}'.format(slash))
             elif int(confirm_new_slash) == 2:
                 print('Operation cancelled. Your current prefix is: {}'.format(slash))
+        elif terminal == slash + 'update_password':
+            confirm_current_password = input("Enter your current password: ")
+            with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
+                jsonData = json.load(file)
+
+                userID = jsonData['user ID']
+                
+                if confirm_current_password == jsonData['password']:
+                    new_password = input("Enter new password: ")
+
+                    with open('assets/users/{}/sign_in_data.json'.format(username), 'w+') as file:
+
+                    
+                        updated_password = {
+                            "username": username,
+                            "password": new_password,
+                            "user ID": userID
+                        }
+
+                        json.dump(updated_password, file, indent = 4, sort_keys = True)
+
+                    print('Your password has been updated!\nNew password: {}'.format(new_password))
+                elif confirm_current_password != jsonData['password']:
+                    print('ERROR: Password does not match!')
 
 
 
