@@ -92,10 +92,12 @@ def gift_code():
     code = input("Enter gift code.\n{}: ".format(username))
     if code in gift_codes:
         points = points + 400
-        print('You have been gifted some points!\nYour total point balance is {}.'.format(points))
+        print('\nYou have been gifted some points!\nYour total point balance is {}.'.format(points))
         gift_codes.remove(code)
     elif code not in gift_codes:
         print('This is not a valid gift code!')
+def command_help():
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{1}claim - Claim 50 points.\n{2}deposit - Deposit your points.\n{3}gift - Enter a gift code to receive some points.\n{4}load - Load your saved data (data is based on username).\n{5}logout - Closes the program.\n{6}save - Save your data (data is based on username).\n{7}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{8}withdraw - Withdraw your points.\n'.format(slash, slash, slash, slash, slash, slash, slash, slash, slash))
 
 
 def console():
@@ -103,41 +105,49 @@ def console():
     global points
     global deposit
     global claim_luck
+    global slash
     while True:
         terminal = input(username + ": ")
 
         if terminal == slash:
-            print('This is the only command prefix. Slash commands are availabe in this script.\nType \"/help\" to see all available commands.')
+            print('\nThis is the only command prefix. Slash commands are availabe in this script.\nType \"/help\" to see all available commands.\n')
         elif terminal == slash + 'help':
-            print('\nAvailable commands:\n/balance - Check your point balance and deposited points.\n/claim - Claim 50 points.\n/deposit - Deposit your points.\n/gift - Enter a gift code to receive some points.\n/load - Load your saved data (data is based on username).\n/logout - Closes the program.\n/save - Save your data (data is based on username).\n/withdraw - Withdraw your points.\n')
+            # Displays available commands.
+            command_help()
         elif terminal == slash + 'claim':
+            # Claims a reward, limited to three.
             reward()
         elif terminal == slash + 'balance':
-            print('Your total point balance is: {0}\nYour deposited points: {1}'.format(points, deposit))
+            print('\nYour total point balance is: {0}\nYour deposited points: {1}\n'.format(points, deposit))
         elif terminal == slash + 'deposit':
             depos()
         elif terminal == slash + 'withdraw':
             withdraw()
         elif terminal == slash + 'save':
             if not os.path.exists('assets/users/{}'.format(username)):
-                print('Use the save command again to save your progress, {}.'.format(username))
+                # Create a save path.
+                print('\nUse the save command again to save your progress, {}.\n'.format(username))
                 os.mkdir('assets/users/{}'.format(username))
             elif os.path.exists('assets/users/{}'.format(username)):
+                # If save path exists, save current data.
                 jsonData = {
                     "username": username,
                     "points": points,
                     "deposit": deposit,
-                    "claim luck": claim_luck
+                    "claim luck": claim_luck,
+                    "slash command prefix": slash
                     }
 
                 with open('assets/users/{}/save_data.json'.format(username), 'w+') as file:
                     json.dump(jsonData, file, indent = 4)
-                    print('Your data has been saved, {}!'.format(username))
+                    print('\nYour data has been saved, {}!\n'.format(username))
 
         elif terminal == slash + 'load':
+            # If save path does not exist, load data cannot be found and an error message is displayed.
             if not os.path.exists('assets/users/{}'.format(username)):
                 print('\nERROR: Saved data for ({}) is nowhere to be found in this program.\n'.format(username))
             elif os.path.exists('assets/users/{}'.format(username)):
+                # If save path exists and has data, all data will be loaded (Depending on the username).
                 with open('assets/users/{}/save_data.json'.format(username), 'r+') as file:
                     data = json.load(file)
 
@@ -145,24 +155,34 @@ def console():
                     points = data['points']
                     deposit = data['deposit']
                     claim_luck = data['claim luck']
+                    slash = data['slash command prefix']
 
-                    print('All your data has been loaded, {}!'.format(username))
+                    print('\nAll your data has been loaded, {}!\n'.format(username))
         elif terminal == slash + 'gift':
             gift_code()
         elif terminal == slash + 'logout':
+            # Closes the program.
             print('Logging out...')
             exit()
+        elif terminal == slash + 'update_slash':
+            new_slash = input("Enter your prefered command prefix.\nExample: /\nNew prefix | {}: ".format(username))
+            confirm_new_slash = input("Are you sure you want '{0}' to be your new prefix? Once this change is made, you must not forget it.\n(1. Yes | 2. No) | {1}: ".format(new_slash, username))
+            if int(confirm_new_slash) == 1:
+                slash = new_slash
+                print('Your slash command prefix has been updated to: {}'.format(slash))
+            elif int(confirm_new_slash) == 2:
+                print('Operation cancelled. Your current prefix is: {}'.format(slash))
 
 
 
 initiate = input("Ready to start the program?\n(1. Yes | 2. No): ")
 if int(initiate) == 1:
     initiateProgram()
-    bp = input("Your point balance (PB) is {}. Would you like to claim bonus points?\n(1. Yes | 2. No): ".format(points))
+    bp = input("\nYour point balance (PB) is {}. Would you like to claim bonus points?\n(1. Yes | 2. No): ".format(points))
     if int(bp) == 1:
         bonus_points()
     elif int(bp) == 2:
-        print('You declined the bonus points, your point balance is {}.'.format(points))
+        print('\nYou declined the bonus points, your point balance is {}.'.format(points))
 
     console()
     
