@@ -154,6 +154,82 @@ def gift_code():
 def command_help():
     print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}save - Save your data (data is based on username).\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
+def save_data():
+    if not os.path.exists('assets/users/{}'.format(username)):
+        # Create a save path.
+        print('\nUse the save command again to save your progress, {}.\n'.format(username))
+        os.mkdir('assets/users/{}'.format(username))
+    elif os.path.exists('assets/users/{}'.format(username)):
+        # If save path exists, save current data.
+        jsonData = {
+            "username": username,
+            "points": points,
+            "deposit": deposit,
+            "claim luck": claim_luck,
+            "slash command prefix": slash
+            }
+
+        with open('assets/users/{}/save_data.json'.format(username), 'w+') as file:
+            json.dump(jsonData, file, indent = 4)
+            print('\nYour data has been saved, {}!\n'.format(username))
+
+def load_data():
+    global username
+    global points
+    global deposit
+    global claim_luck
+    global slash
+    # If save path does not exist, load data cannot be found and an error message is displayed.
+    if not os.path.exists('assets/users/{}'.format(username)):
+        print('\nERROR: Saved data for ({}) is nowhere to be found in this program.\n'.format(username))
+    elif os.path.exists('assets/users/{}'.format(username)):
+        # If save path exists and has data, all data will be loaded (Depending on the username).
+        with open('assets/users/{}/save_data.json'.format(username), 'r+') as file:
+            data = json.load(file)
+
+            username = data['username']
+            points = data['points']
+            deposit = data['deposit']
+            claim_luck = data['claim luck']
+            slash = data['slash command prefix']
+
+            print('\nAll your data has been loaded, {}!\n'.format(username))
+
+def update_slash_command():
+    global slash
+    new_slash = input("Enter your prefered command prefix.\nExample: /\nNew prefix | {}: ".format(username))
+    confirm_new_slash = input("Are you sure you want '{0}' to be your new prefix? Once this change is made, you must not forget it.\n(1. Yes | 2. No) | {1}: ".format(new_slash, username))
+    if int(confirm_new_slash) == 1:
+        slash = new_slash
+        print('Your slash command prefix has been updated to: {}'.format(slash))
+    elif int(confirm_new_slash) == 2:
+        print('Operation cancelled. Your current prefix is: {}'.format(slash))
+
+def update_password():
+    confirm_current_password = input("Enter your current password: ")
+    with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
+        jsonData = json.load(file)
+
+        userID = jsonData['user ID']
+                
+        if confirm_current_password == jsonData['password']:
+            new_password = input("Enter new password: ")
+
+            with open('assets/users/{}/sign_in_data.json'.format(username), 'w+') as file:
+
+                    
+                updated_password = {
+                    "username": username,
+                    "password": new_password,
+                    "user ID": userID
+                    }
+
+                json.dump(updated_password, file, indent = 4, sort_keys = True)
+
+                print('Your password has been updated!\nNew password: {}'.format(new_password))
+        elif confirm_current_password != jsonData['password']:
+            print('ERROR: Password does not match!')
+
 
 def console():
     global username
@@ -165,7 +241,7 @@ def console():
         terminal = input(username + ": ")
 
         if terminal == slash:
-            print('\nThis is the only command prefix. Slash commands are availabe in this script.\nType \"/help\" to see all available commands.\n')
+            print('\nThis is the only command prefix. Slash commands are availabe in this script.\nType \"{}help\" to see all available commands.\n'.format(slash))
         elif terminal == slash + 'help':
             # Displays available commands.
             command_help()
@@ -179,40 +255,12 @@ def console():
         elif terminal == slash + 'withdraw':
             withdraw()
         elif terminal == slash + 'save':
-            if not os.path.exists('assets/users/{}'.format(username)):
-                # Create a save path.
-                print('\nUse the save command again to save your progress, {}.\n'.format(username))
-                os.mkdir('assets/users/{}'.format(username))
-            elif os.path.exists('assets/users/{}'.format(username)):
-                # If save path exists, save current data.
-                jsonData = {
-                    "username": username,
-                    "points": points,
-                    "deposit": deposit,
-                    "claim luck": claim_luck,
-                    "slash command prefix": slash
-                    }
-
-                with open('assets/users/{}/save_data.json'.format(username), 'w+') as file:
-                    json.dump(jsonData, file, indent = 4)
-                    print('\nYour data has been saved, {}!\n'.format(username))
+            # Save the current data.
+            save_data()
 
         elif terminal == slash + 'load':
-            # If save path does not exist, load data cannot be found and an error message is displayed.
-            if not os.path.exists('assets/users/{}'.format(username)):
-                print('\nERROR: Saved data for ({}) is nowhere to be found in this program.\n'.format(username))
-            elif os.path.exists('assets/users/{}'.format(username)):
-                # If save path exists and has data, all data will be loaded (Depending on the username).
-                with open('assets/users/{}/save_data.json'.format(username), 'r+') as file:
-                    data = json.load(file)
-
-                    username = data['username']
-                    points = data['points']
-                    deposit = data['deposit']
-                    claim_luck = data['claim luck']
-                    slash = data['slash command prefix']
-
-                    print('\nAll your data has been loaded, {}!\n'.format(username))
+            # Load the current data.
+            load_data()
         elif terminal == slash + 'gift':
             gift_code()
         elif terminal == slash + 'logout':
@@ -220,37 +268,10 @@ def console():
             print('Logging out...')
             exit()
         elif terminal == slash + 'update_slash':
-            new_slash = input("Enter your prefered command prefix.\nExample: /\nNew prefix | {}: ".format(username))
-            confirm_new_slash = input("Are you sure you want '{0}' to be your new prefix? Once this change is made, you must not forget it.\n(1. Yes | 2. No) | {1}: ".format(new_slash, username))
-            if int(confirm_new_slash) == 1:
-                slash = new_slash
-                print('Your slash command prefix has been updated to: {}'.format(slash))
-            elif int(confirm_new_slash) == 2:
-                print('Operation cancelled. Your current prefix is: {}'.format(slash))
+            # Updates the slash command prefix.
+            update_slash_command()
         elif terminal == slash + 'update_password':
-            confirm_current_password = input("Enter your current password: ")
-            with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
-                jsonData = json.load(file)
-
-                userID = jsonData['user ID']
-                
-                if confirm_current_password == jsonData['password']:
-                    new_password = input("Enter new password: ")
-
-                    with open('assets/users/{}/sign_in_data.json'.format(username), 'w+') as file:
-
-                    
-                        updated_password = {
-                            "username": username,
-                            "password": new_password,
-                            "user ID": userID
-                        }
-
-                        json.dump(updated_password, file, indent = 4, sort_keys = True)
-
-                    print('Your password has been updated!\nNew password: {}'.format(new_password))
-                elif confirm_current_password != jsonData['password']:
-                    print('ERROR: Password does not match!')
+            update_password()
 
 
 
