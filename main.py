@@ -230,6 +230,18 @@ def update_password():
         elif confirm_current_password != jsonData['password']:
             print('ERROR: Password does not match!')
 
+def logout():
+    confirm_logout = input("\nMake sure all your progress is saved!\nAre you sure you want to log out?\n(1. Yes | 2. No): ")
+    if int(confirm_logout) == 1:
+        print('Logging out...')
+        exit()
+    elif int(confirm_logout) == 2:
+        print('Logout cancelled.')
+    elif int(confirm_logout) != 1 or int(confirm_logout) != 2:
+        print('This not a valid option, you only have two.')
+    else:
+        print('Unknown error.')
+
 
 def console():
     global username
@@ -265,8 +277,7 @@ def console():
             gift_code()
         elif terminal == slash + 'logout':
             # Closes the program.
-            print('Logging out...')
-            exit()
+            logout()
         elif terminal == slash + 'update_slash':
             # Updates the slash command prefix.
             update_slash_command()
