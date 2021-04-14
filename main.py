@@ -16,50 +16,56 @@ points = 0
 
 deposit = 0
 
-claim_luck = 3
+luck = 3
+
+sign_in_id = None
 
 def sign_in_function():
     global username
+    global sign_in_id
     sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
     if int(sign_in_option) == 1:
-        username = input("[Sign-in] | Enter username: ")
-        if not os.path.exists('assets/users/{}/sign_in_data.json'.format(username)):
-            print("ERROR: '{}' isn't a registered user!".format(username))
+        sign_in_id = input("[Sign-in] | Enter sign-in ID: ")
+        if not os.path.exists('assets/users/{}/sign_in_data.json'.format(sign_in_id)):
+            print("ERROR: This account isn't a registered user!, feel free to claim!")
             exit()
-        elif os.path.exists('assets/users/{}/sign_in_data.json'.format(username)):
+        elif os.path.exists('assets/users/{}/sign_in_data.json'.format(sign_in_id)):
             pass
-        with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
+        with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'r+') as file:
             jsonData = json.load(file)
 
-            if username != jsonData['username']:
-                print('ERROR: Invalid username.')
+            if sign_in_id != jsonData['sign-in ID']:
+                print('ERROR: Invalid login.')
                 exit()
-            elif username == jsonData['username']:
-                password = input("[Sign-in - {}] | Enter password: ".format(username))
+            elif sign_in_id == jsonData['sign-in ID']:
+                username = jsonData['username']
+                password = input("[Sign-in - {}] | Enter password: ".format(jsonData['username']))
                 if password != jsonData['password']:
                     print('ERROR: Invalid password!')
                     exit()
                 elif password == jsonData['password']:
-                    print("Welcome back, {}!".format(username))
+                    print("Welcome back, {}!".format(jsonData['username']))
     elif int(sign_in_option) == 2:
-        username = input("[Sign-up] | Enter username: ")
+        sign_in_id = input("[Sign-up] | Create unique sign-in ID: ")
+        username = input("[Sign-up] | Choose username: ")
         password = input("[Sign-up - {}] | Enter password: ".format(username))
 
-        if not os.path.exists('assets/users/{}'.format(username)):
-            os.mkdir('assets/users/{}'.format(username))
-        elif os.path.exists('assets/users/{}'.format(username)):
+        if not os.path.exists('assets/users/{}'.format(sign_in_id)):
+            os.mkdir('assets/users/{}'.format(sign_in_id))
+        elif os.path.exists('assets/users/{}'.format(sign_in_id)):
             pass
 
-        with open('assets/users/{}/save_data.json'.format(username), 'x') as file:
+        with open('assets/users/{}/save_data.json'.format(sign_in_id), 'x') as file:
             file.close()
 
         sign_in_data = {
             "username": username,
             "password": password,
-            "user ID": id(username)
+            "sign-in ID": sign_in_id,
+            "user ID": id(sign_in_id)
             }
 
-        with open('assets/users/{}/sign_in_data.json'.format(username), 'w+') as file:
+        with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
             json.dump(sign_in_data, file, indent = 4, sort_keys = True)
     
 
@@ -93,12 +99,12 @@ def bonus_points():
 
 def reward():
     global points
-    global claim_luck
+    global luck
 
-    if claim_luck <= 0:
+    if luck <= 0:
         print('Your ran out of luck, {}...'.format(username))
     else:
-        claim_luck = claim_luck - 1
+        luck = luck - 1
         points = points + 50
 
         print('Your point balance is now {0}, {1}.'.format(points, username))
@@ -155,21 +161,21 @@ def command_help():
     print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}save - Save your data (data is based on username).\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 def save_data():
-    if not os.path.exists('assets/users/{}'.format(username)):
+    if not os.path.exists('assets/users/{}'.format(sign_in_id)):
         # Create a save path.
         print('\nUse the save command again to save your progress, {}.\n'.format(username))
-        os.mkdir('assets/users/{}'.format(username))
-    elif os.path.exists('assets/users/{}'.format(username)):
+        os.mkdir('assets/users/{}'.format(sign_in_id))
+    elif os.path.exists('assets/users/{}'.format(sign_in_id)):
         # If save path exists, save current data.
         jsonData = {
             "username": username,
             "points": points,
             "deposit": deposit,
-            "claim luck": claim_luck,
+            "luck": luck,
             "slash command prefix": slash
             }
 
-        with open('assets/users/{}/save_data.json'.format(username), 'w+') as file:
+        with open('assets/users/{}/save_data.json'.format(sign_in_id), 'w+') as file:
             json.dump(jsonData, file, indent = 4)
             print('\nYour data has been saved, {}!\n'.format(username))
 
@@ -177,20 +183,21 @@ def load_data():
     global username
     global points
     global deposit
-    global claim_luck
+    global luck
     global slash
+    global sign_in_id
     # If save path does not exist, load data cannot be found and an error message is displayed.
-    if not os.path.exists('assets/users/{}'.format(username)):
+    if not os.path.exists('assets/users/{}'.format(sign_in_id)):
         print('\nERROR: Saved data for ({}) is nowhere to be found in this program.\n'.format(username))
-    elif os.path.exists('assets/users/{}'.format(username)):
+    elif os.path.exists('assets/users/{}'.format(sign_in_id)):
         # If save path exists and has data, all data will be loaded (Depending on the username).
-        with open('assets/users/{}/save_data.json'.format(username), 'r+') as file:
+        with open('assets/users/{}/save_data.json'.format(sign_in_id), 'r+') as file:
             data = json.load(file)
 
             username = data['username']
             points = data['points']
             deposit = data['deposit']
-            claim_luck = data['claim luck']
+            luck = data['luck']
             slash = data['slash command prefix']
 
             print('\nAll your data has been loaded, {}!\n'.format(username))
@@ -207,7 +214,7 @@ def update_slash_command():
 
 def update_password():
     confirm_current_password = input("Enter your current password: ")
-    with open('assets/users/{}/sign_in_data.json'.format(username), 'r+') as file:
+    with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'r+') as file:
         jsonData = json.load(file)
 
         userID = jsonData['user ID']
@@ -215,12 +222,13 @@ def update_password():
         if confirm_current_password == jsonData['password']:
             new_password = input("Enter new password: ")
 
-            with open('assets/users/{}/sign_in_data.json'.format(username), 'w+') as file:
+            with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
 
                     
                 updated_password = {
                     "username": username,
                     "password": new_password,
+                    "sign-in ID": sign_in_id,
                     "user ID": userID
                     }
 
@@ -247,8 +255,9 @@ def console():
     global username
     global points
     global deposit
-    global claim_luck
+    global luck
     global slash
+    global sign_in_id
     while True:
         terminal = input(username + ": ")
 
