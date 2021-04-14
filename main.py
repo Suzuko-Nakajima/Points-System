@@ -275,15 +275,12 @@ def console():
 
 
 
-initiate = input("Ready to start the program?\n(1. Yes | 2. No): ")
-if int(initiate) == 1:
-    initiateProgram()
-    bp = input("\nYour point balance (PB) is {}. Would you like to claim bonus points?\n(1. Yes | 2. No): ".format(points))
-    if int(bp) == 1:
-        bonus_points()
-    elif int(bp) == 2:
-        print('\nYou declined the bonus points, your point balance is {}.'.format(points))
 
-    console()
-elif int(initiate) == 2:
-    print('Cancelled.')
+initiateProgram()
+bp = input("\nYour point balance (PB) is {}. Would you like to claim bonus points?\n(1. Yes | 2. No): ".format(points))
+if int(bp) == 1:
+    bonus_points()
+elif int(bp) == 2:
+    print('\nYou declined the bonus points, your point balance is {}.'.format(points))
+
+console()
