@@ -170,7 +170,7 @@ def gift_code():
         elif code != jsonData['code']:
             print('This is not a valid gift code!')
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on username).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}inventory - View your inventory.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on username).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 def save_data():
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
@@ -342,6 +342,10 @@ def purchase():
     else:
         pass
 
+def inventory():
+    global healing_aura
+    print('Inventory:\n\nHealing Aura: {}'.format(healing_aura))
+
 
 
 def console():
@@ -381,6 +385,7 @@ def console():
             # Closes the program.
             logout()
         elif terminal == slash + 'purchase':
+            # Purchase items.
             purchase()
         elif terminal == slash + 'shop':
             shop()
@@ -388,11 +393,16 @@ def console():
             # Updates the slash command prefix.
             update_slash_command()
         elif terminal == slash + 'update_password':
+            # Update user password.
             update_password()
         elif terminal == slash + 'uuid':
+            # Dislay user ID.
             my_id()
         elif terminal == slash + 'uun':
+            # Update username.
             uun()
+        elif terminal == slash + 'inventory':
+            inventory()
 
 
 
