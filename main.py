@@ -20,9 +20,12 @@ luck = 3
 
 sign_in_id = None
 
+charlimit = 16
+
 def sign_in_function():
     global username
     global sign_in_id
+    global charlimit
     sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
     if int(sign_in_option) == 1:
         sign_in_id = input("[Sign-in] | Enter sign-in ID: ")
@@ -47,26 +50,31 @@ def sign_in_function():
                     print("Welcome back, {}!".format(jsonData['username']))
     elif int(sign_in_option) == 2:
         sign_in_id = input("[Sign-up] | Create unique sign-in ID: ")
-        username = input("[Sign-up] | Choose username: ")
-        password = input("[Sign-up - {}] | Enter password: ".format(username))
+        if len(sign_in_id) > charlimit:
+            print('ERROR: Your sign-in ID cannot exceed over {} character(s).'.format(charlimit))
+            exit()
+        elif len(sign_in_id) <= charlimit:
+            username = input("[Sign-up] | Choose username: ")
+            password = input("[Sign-up - {}] | Enter password: ".format(username))
 
-        if not os.path.exists('assets/users/{}'.format(sign_in_id)):
-            os.mkdir('assets/users/{}'.format(sign_in_id))
-        elif os.path.exists('assets/users/{}'.format(sign_in_id)):
-            pass
+            if not os.path.exists('assets/users/{}'.format(sign_in_id)):
+                os.mkdir('assets/users/{}'.format(sign_in_id))
+            elif os.path.exists('assets/users/{}'.format(sign_in_id)):
+                print('ERROR: Sign-in ID already exists. Please create a different sign-in ID.')
+                exit()
 
-        with open('assets/users/{}/save_data.json'.format(sign_in_id), 'x') as file:
-            file.close()
+            with open('assets/users/{}/save_data.json'.format(sign_in_id), 'x') as file:
+                file.close()
 
-        sign_in_data = {
-            "username": username,
-            "password": password,
-            "sign-in ID": sign_in_id,
-            "user ID": id(sign_in_id)
-            }
+            sign_in_data = {
+                "username": username,
+                "password": password,
+                "sign-in ID": sign_in_id,
+                "user ID": id(sign_in_id)
+                }
 
-        with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
-            json.dump(sign_in_data, file, indent = 4, sort_keys = True)
+            with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
+                json.dump(sign_in_data, file, indent = 4, sort_keys = True)
     
 
 
@@ -158,7 +166,7 @@ def gift_code():
         elif code != jsonData['code']:
             print('This is not a valid gift code!')
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}save - Save your data (data is based on username).\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}save - Save your data (data is based on username).\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 def save_data():
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
@@ -250,6 +258,36 @@ def logout():
     else:
         print('Unknown error.')
 
+def my_id():
+    with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'r+') as file:
+        my_data = json.load(file)
+
+        print('Your unique user ID is:', my_data['user ID'])
+        file.close()
+
+def uun():
+    global sign_in_id
+    global username
+    confirm_password = input("Enter password to proceed: ")
+    with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'r+') as file:
+        jsonData = json.load(file) 
+        if confirm_password == jsonData['password']:
+            new_username = input("[{}] | Enter new username: ".format(username))
+
+            new_data = {
+                "username": new_username,
+                "password": jsonData['password'],
+                "user ID": jsonData['user ID'],
+                "sign-in ID": jsonData['sign-in ID']
+            }
+
+            with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
+                json.dump(new_data, file, indent = 4, sort_keys = True)
+            print('Finished!')
+        elif confirm_password != jsonData['password']:
+            print('ERROR: Password is incorrect.')
+
+
 
 def console():
     global username
@@ -292,6 +330,10 @@ def console():
             update_slash_command()
         elif terminal == slash + 'update_password':
             update_password()
+        elif terminal == slash + 'uuid':
+            my_id()
+        elif terminal == slash + 'uun':
+            uun()
 
 
 
