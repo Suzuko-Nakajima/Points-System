@@ -22,6 +22,10 @@ sign_in_id = None
 
 charlimit = 16
 
+healing_aura = 0
+
+healing_aura_stock = 10
+
 def sign_in_function():
     global username
     global sign_in_id
@@ -166,7 +170,7 @@ def gift_code():
         elif code != jsonData['code']:
             print('This is not a valid gift code!')
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}save - Save your data (data is based on username).\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on username).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 def save_data():
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
@@ -176,6 +180,8 @@ def save_data():
     elif os.path.exists('assets/users/{}'.format(sign_in_id)):
         # If save path exists, save current data.
         jsonData = {
+            "healing aura": healing_aura,
+            "healing aura stock": healing_aura_stock,
             "username": username,
             "points": points,
             "deposit": deposit,
@@ -188,6 +194,8 @@ def save_data():
             print('\nYour data has been saved, {}!\n'.format(username))
 
 def load_data():
+    global healing_aura
+    global healing_aura_stock
     global username
     global points
     global deposit
@@ -202,6 +210,8 @@ def load_data():
         with open('assets/users/{}/save_data.json'.format(sign_in_id), 'r+') as file:
             data = json.load(file)
 
+            healing_aura = data['healing aura']
+            healing_aura_stock = data['healing aura stock']
             username = data['username']
             points = data['points']
             deposit = data['deposit']
@@ -209,6 +219,8 @@ def load_data():
             slash = data['slash command prefix']
 
             print('\nAll your data has been loaded, {}!\n'.format(username))
+
+            file.close()
 
 def update_slash_command():
     global slash
@@ -283,9 +295,52 @@ def uun():
 
             with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
                 json.dump(new_data, file, indent = 4, sort_keys = True)
-            print('Finished!')
+            print('Finished! (1/2)')
+            file.close()
+
+            with open('assets/users/{}/save_data.json'.format(sign_in_id), 'r+') as file:
+                json_saveData = json.load(file)
+
+                new_save_data = {
+                    "username": new_username,
+                    "deposit": json_saveData['deposit'],
+                    "points": json_saveData['points'],
+                    "luck": json_saveData['luck'],
+                    "slash command prefix": json_saveData['slash command prefix']
+                }
+
+                with open('assets/users/{}/save_data.json'.format(sign_in_id), 'w+') as file:
+                    json.dump(new_save_data, file, indent = 4, sort_keys = True)
+                    file.close()
+
+                    print('Username updated sucessfully! (2/2)')
         elif confirm_password != jsonData['password']:
             print('ERROR: Password is incorrect.')
+
+def shop():
+    print('Items:\n\n1. Healing Aura')
+
+def purchase():
+    global healing_aura
+    global healing_aura_stock
+    global points
+    global username
+    purchase_command_line = input("Know the item you want to purchase.\nPurchase item: ")
+    if int(purchase_command_line) == 1:
+        item = "Healing Aura"
+        if healing_aura_stock < 1:
+            print('ERROR: This item is out of stock!')
+        elif points < 75:
+            print('ERROR: You do not have a sufficient amount of funds!')
+        elif not healing_aura_stock < 1 and not points < 75:
+            healing_aura_stock = healing_aura_stock - 1
+            healing_aura = healing_aura + 1
+            points = points - 75
+
+            print('-75 points!\nThank you for your purchase, {0}!\n+1 {1}'.format(username, item))
+
+    else:
+        pass
 
 
 
@@ -325,6 +380,10 @@ def console():
         elif terminal == slash + 'logout':
             # Closes the program.
             logout()
+        elif terminal == slash + 'purchase':
+            purchase()
+        elif terminal == slash + 'shop':
+            shop()
         elif terminal == slash + 'update_slash':
             # Updates the slash command prefix.
             update_slash_command()
