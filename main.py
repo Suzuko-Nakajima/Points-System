@@ -3,6 +3,7 @@ import os
 import sys
 import platform
 import json
+import random
 import time
 import datetime
 
@@ -11,6 +12,8 @@ if not os.path.exists('assets/users'):
     os.mkdir('assets/users')
 
 slash = '/'
+
+stamina_points = 100
 
 points = 0
 
@@ -30,6 +33,11 @@ def sign_in_function():
     global username
     global sign_in_id
     global charlimit
+    global points
+    global deposit
+    global healing_aura
+    global healing_aura_stock
+    global stamina_points
     sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
     if int(sign_in_option) == 1:
         sign_in_id = input("[Sign-in] | Enter sign-in ID: ")
@@ -52,6 +60,10 @@ def sign_in_function():
                     exit()
                 elif password == jsonData['password']:
                     print("Welcome back, {}!".format(jsonData['username']))
+                    file.close()
+
+
+
     elif int(sign_in_option) == 2:
         sign_in_id = input("[Sign-up] | Create unique sign-in ID: ")
         if len(sign_in_id) > charlimit:
@@ -186,7 +198,8 @@ def save_data():
             "points": points,
             "deposit": deposit,
             "luck": luck,
-            "slash command prefix": slash
+            "slash command prefix": slash,
+            "stamina points": stamina_points
             }
 
         with open('assets/users/{}/save_data.json'.format(sign_in_id), 'w+') as file:
@@ -202,6 +215,7 @@ def load_data():
     global luck
     global slash
     global sign_in_id
+    global stamina_points
     # If save path does not exist, load data cannot be found and an error message is displayed.
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
         print('\nERROR: Saved data for ({}) is nowhere to be found in this program.\n'.format(username))
@@ -210,6 +224,8 @@ def load_data():
         with open('assets/users/{}/save_data.json'.format(sign_in_id), 'r+') as file:
             data = json.load(file)
 
+            damage = random.randint(10, 25)
+
             healing_aura = data['healing aura']
             healing_aura_stock = data['healing aura stock']
             username = data['username']
@@ -217,10 +233,14 @@ def load_data():
             deposit = data['deposit']
             luck = data['luck']
             slash = data['slash command prefix']
+            stamina_points = data['stamina points'] - damage
 
-            print('\nAll your data has been loaded, {}!\n'.format(username))
+            if stamina_points <= 0:
+                print('ERROR: You no longer have enough stamina points to load in your data.')
+            elif not stamina_points <= 0:
+                print('\nAll your data has been loaded, {}!\n'.format(username))
 
-            file.close()
+                file.close()
 
 def update_slash_command():
     global slash
@@ -344,7 +364,21 @@ def purchase():
 
 def inventory():
     global healing_aura
+    global stamina_points
     print('Inventory:\n\nHealing Aura: {}'.format(healing_aura))
+
+def use_item():
+    global healing_aura
+    global stamina_points
+    select_item = input("Select an item you would like to use (Remember the numbers next to the items).\nSelect item: ")
+    if int(select_item) == 1:
+        healing_aura = healing_aura - 1
+        
+        random_heal = random.randint(15, 20)
+
+        stamina_points = stamina_points + random_heal
+
+        print('Your stamina has been replinished to {}%!'.format(stamina_points))
 
 
 
@@ -355,8 +389,9 @@ def console():
     global luck
     global slash
     global sign_in_id
+    global stamina_points
     while True:
-        terminal = input(username + ": ")
+        terminal = input(f"[{stamina_points}%] | {username}: ")
 
         if terminal == slash:
             print('\nThis is the only command prefix. Slash commands are availabe in this script.\nType \"{}help\" to see all available commands.\n'.format(slash))
@@ -403,6 +438,8 @@ def console():
             uun()
         elif terminal == slash + 'inventory':
             inventory()
+        elif terminal == slash + 'use':
+            use_item()
 
 
 

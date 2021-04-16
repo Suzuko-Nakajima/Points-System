@@ -1,9 +1,10 @@
 {
-    "healing aura": 1,
-    "healing aura stock": 9,
+    "healing aura": 0,
+    "healing aura stock": 97,
     "username": "Nakajima, Suzuko",
-    "points": 0,
-    "deposit": 2425,
-    "luck": 0,
-    "slash command prefix": "./"
+    "points": 100,
+    "deposit": 4325,
+    "luck": 2,
+    "slash command prefix": "/",
+    "stamina points": 106
 }
