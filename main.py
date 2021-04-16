@@ -236,7 +236,8 @@ def load_data():
             stamina_points = data['stamina points'] - damage
 
             if stamina_points <= 0:
-                print('ERROR: You no longer have enough stamina points to load in your data.')
+                print('ERROR: You no longer have enough stamina points to load in your data.\nStamina points: {}%'.format(stamina_points))
+                exit()
             elif not stamina_points <= 0:
                 print('\nAll your data has been loaded, {}!\n'.format(username))
 
