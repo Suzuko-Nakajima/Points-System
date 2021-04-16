@@ -19,7 +19,7 @@ points = 0
 
 deposit = 0
 
-luck = 3
+luck = 7
 
 sign_in_id = None
 
@@ -27,7 +27,7 @@ charlimit = 16
 
 healing_aura = 0
 
-healing_aura_stock = 10
+healing_aura_stock = 50
 
 def sign_in_function():
     global username
@@ -118,7 +118,7 @@ def initiateProgram():
 
 def bonus_points():
     global points
-    points = points + 100
+    points = points + 300
     print('You have received', points, 'bonus points!')
 
 def reward():
@@ -172,7 +172,7 @@ def gift_code():
         jsonData = json.load(file)
 
         if code == jsonData['code']:
-            points = points + 750
+            points = points + 1000
             print('You have received extra points!\nYour new total is points is: {}'.format(points))
 
             used_code = {}
@@ -182,7 +182,7 @@ def gift_code():
         elif code != jsonData['code']:
             print('This is not a valid gift code!')
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}inventory - View your inventory.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on sign-in ID).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}withdraw - Withdraw your points.\n'.format(slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}inventory - View your inventory.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on sign-in ID).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}use - Use any items in your inventory.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 def save_data():
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
@@ -323,11 +323,14 @@ def uun():
                 json_saveData = json.load(file)
 
                 new_save_data = {
+                    "healing aura": json_saveData['healing aura'],
+                    "healing aura stock": json_saveData['healing aura stock'],
                     "username": new_username,
                     "deposit": json_saveData['deposit'],
                     "points": json_saveData['points'],
                     "luck": json_saveData['luck'],
-                    "slash command prefix": json_saveData['slash command prefix']
+                    "slash command prefix": json_saveData['slash command prefix'],
+                    "stamina points": json_saveData['stamina points']
                 }
 
                 with open('assets/users/{}/save_data.json'.format(sign_in_id), 'w+') as file:
@@ -339,7 +342,7 @@ def uun():
             print('ERROR: Password is incorrect.')
 
 def shop():
-    print('Items:\n\n1. Healing Aura')
+    print('Items:\n\n1. Healing Aura | [75]')
 
 def purchase():
     global healing_aura
@@ -373,13 +376,18 @@ def use_item():
     global stamina_points
     select_item = input("Select an item you would like to use (Remember the numbers next to the items).\nSelect item: ")
     if int(select_item) == 1:
-        healing_aura = healing_aura - 1
+        if stamina_points >= 100:
+            print('ERROR: Your stamina is already maxed out!')
+        elif not stamina_points >= 100:
+            healing_aura = healing_aura - 1
         
-        random_heal = random.randint(15, 20)
+            random_heal = random.randint(15, 20)
 
-        stamina_points = stamina_points + random_heal
+            stamina_points = stamina_points + random_heal
 
-        print('Your stamina has been replinished to {}%!'.format(stamina_points))
+            if stamina_points >= 100:
+                stamina_points = 100
+                print('Your stamina has been replinished to {}%!'.format(stamina_points))
 
 
 
