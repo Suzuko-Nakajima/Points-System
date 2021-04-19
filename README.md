@@ -9,3 +9,10 @@ This repository is another small project of mine, I'm putting all I know about P
 **HOW TO USE:**
 - You can initiate the project either on your computer or on an online IDE editor using `python3 main.py` in the command line.
 - Next, enter a username you can remember when the program asks for one. After you choose a username and start up the program, you can use commands. Just type "/help" to view all the available commands.
+
+---
+
+## Update v2021.4.20.1/2
+- Bug fixes.
+- Stamina poitns converted from integers to float.
+- Iron sword is purchaseable.
