@@ -13,7 +13,7 @@ if not os.path.exists('assets/users'):
 
 slash = '/'
 
-stamina_points = 100
+stamina_points = float(100.0)
 
 points = 0
 
@@ -29,6 +29,10 @@ healing_aura = 0
 
 healing_aura_stock = 50
 
+iron_sword = 0
+
+iron_sword_durability = 0
+
 def sign_in_function():
     global username
     global sign_in_id
@@ -37,6 +41,8 @@ def sign_in_function():
     global deposit
     global healing_aura
     global healing_aura_stock
+    global iron_sword
+    global iron_sword_durability
     global stamina_points
     sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
     if int(sign_in_option) == 1:
@@ -97,8 +103,6 @@ def sign_in_function():
 sign_in_function()
 
 
-
-gift_codes = ["S19N"]
 
 if not os.path.exists('assets/users'):
     os.mkdir('assets/users')
@@ -194,6 +198,8 @@ def save_data():
         jsonData = {
             "healing aura": healing_aura,
             "healing aura stock": healing_aura_stock,
+            "iron sword": iron_sword,
+            "iron sword durability": iron_sword_durability,
             "username": username,
             "points": points,
             "deposit": deposit,
@@ -209,6 +215,8 @@ def save_data():
 def load_data():
     global healing_aura
     global healing_aura_stock
+    global iron_sword
+    global iron_sword_durability
     global username
     global points
     global deposit
@@ -224,10 +232,12 @@ def load_data():
         with open('assets/users/{}/save_data.json'.format(sign_in_id), 'r+') as file:
             data = json.load(file)
 
-            damage = random.randint(10, 25)
+            damage = random.uniform(10, 25)
 
             healing_aura = data['healing aura']
             healing_aura_stock = data['healing aura stock']
+            iron_sword = data['iron sword']
+            iron_sword_durability = data['iron sword durability']
             username = data['username']
             points = data['points']
             deposit = data['deposit']
@@ -342,11 +352,13 @@ def uun():
             print('ERROR: Password is incorrect.')
 
 def shop():
-    print('Items:\n\n1. Healing Aura | [75]')
+    print('Items:\n\n1. Healing Aura | [75]\n2. Iron sword | [150]\n')
 
 def purchase():
     global healing_aura
     global healing_aura_stock
+    global iron_sword
+    global iron_sword_durability
     global points
     global username
     purchase_command_line = input("Know the item you want to purchase.\nPurchase item: ")
@@ -362,14 +374,28 @@ def purchase():
             points = points - 75
 
             print('-75 points!\nThank you for your purchase, {0}!\n+1 {1}'.format(username, item))
+    elif int(purchase_command_line) == 2:
+        item_iron_sword = "Iron sword"
+        if points < 150:
+            print('ERROR: You do not have enough points to purchase this item. | [{}]'.format(item))
+        elif iron_sword > 0:
+            print('ERROR: You already have this item. | [{}]'.format(item_iron_sword))
+        elif not points < 150 and not iron_sword > 0:
+            iron_sword = iron_sword + 1
+            iron_sword_durability = iron_sword_durability + 1000
+            points = points - 150
+
+            print('-150 points!\nThank you for your purchase, {0}!\n+1 {1}'.format(username, item_iron_sword))
 
     else:
         pass
 
 def inventory():
     global healing_aura
+    global iron_sword
+    global iron_sword_durability
     global stamina_points
-    print('Inventory:\n\nHealing Aura: {}'.format(healing_aura))
+    print('Inventory:\n\nHealing Aura: {0}\nIron sword: {1} [{2}]'.format(healing_aura, iron_sword, iron_sword_durability))
 
 def use_item():
     global healing_aura
