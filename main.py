@@ -68,6 +68,8 @@ bow = 0
 bow_durability = 0
 arrows = 0
 
+tipped_arrows = 0
+
 def sign_in_function():
     global battle_xp
     global username
@@ -83,6 +85,7 @@ def sign_in_function():
     global stamina_points
     global silver_sword
     global silver_sword_durability
+    global tipped_arrows
     global bow
     global bow_durability
     global arrows
@@ -270,7 +273,8 @@ def save_data():
             "silver sword": silver_sword,
             "silver sword durability": silver_sword_durability,
             "slash command prefix": slash,
-            "stamina points": stamina_points
+            "stamina points": stamina_points,
+            "tipped arrows": tipped_arrows
             }
 
         with open('assets/users/{}/save_data.json'.format(sign_in_id), 'w+') as file:
@@ -296,6 +300,7 @@ def load_data():
     global stamina_points
     global silver_sword
     global silver_sword_durability
+    global tipped_arrows
     global logout_dialogue
     # If save path does not exist, load data cannot be found and an error message is displayed.
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
@@ -325,6 +330,7 @@ def load_data():
             silver_sword_durability = data['silver sword durability']
             slash = data['slash command prefix']
             stamina_points = data['stamina points'] - damage
+            tipped_arrows = data['tipped arrows']
 
             if stamina_points <= 0:
                 print('{0}ERROR: You no longer have enough stamina points to load in your data.{1}\nStamina points: {2}%'.format(tcolors.red, tcolors.reset, stamina_points))
@@ -387,6 +393,7 @@ def logout():
     global slash
     global sign_in_id
     global stamina_points
+    global tipped_arrows
     global logout_dialogue
     confirm_logout = input("\n{0}Make sure all your progress is saved!\nAre you sure you want to log out?\n(1. Yes | 2. No): {1}".format(tcolors.grey, tcolors.reset))
     if int(confirm_logout) == 1:
@@ -452,7 +459,8 @@ def uun():
                     "silver sword": json_saveData['silver sword'],
                     "silver sword durability": json_saveData['silver sword durability'],
                     "slash command prefix": json_saveData['slash command prefix'],
-                    "stamina points": json_saveData['stamina points']
+                    "stamina points": json_saveData['stamina points'],
+                    "tipped arrows": json_saveData['tipped arrows']
                 }
 
                 with open('assets/users/{}/save_data.json'.format(sign_in_id), 'w+') as file:
@@ -464,7 +472,7 @@ def uun():
             print('ERROR: Password is incorrect.')
 
 def shop():
-    print('Items:\n\n1. Healing Aura | [75]\n2. Iron sword | [150]\n3. Silver sword | [250]\n4. Bow\n5. Arrows [Regular]\n6. Arrows [Enhanced]\n')
+    print('Items:\n\n1. Healing Aura | [75]\n2. Iron sword | [150]\n3. Silver sword | [250]\n4. Bow\n5. Arrows [Regular]\n6. Arrows [Enhanced]\n7. Tipped arrows [Poison]\n')
 
 def purchase():
     global arrows
@@ -479,6 +487,7 @@ def purchase():
     global username
     global silver_sword
     global silver_sword_durability
+    global tipped_arrows
     purchase_command_line = input("Know the item you want to purchase.\nPurchase item: ")
     if int(purchase_command_line) == 1:
         item = "Healing Aura"
@@ -536,7 +545,7 @@ def purchase():
             arrows = arrows + 16
             points = points - 50
 
-            print('-50 points!\nThank you for your purchase, {0}!\n+1 {1}'.format(username, item_arrows))
+            print('-50 points!\nThank you for your purchase, {0}!\n+16 {1}'.format(username, item_arrows))
     elif int(purchase_command_line) == 6:
         en_arrows = 'Enhanced arrows'
         if points < 100:
@@ -545,7 +554,17 @@ def purchase():
             enhanced_arrows = enhanced_arrows + 16
             points = points - 100
 
-            print('-100 points!\nThank you for your purchase, {0}!\n+1 {1}'.format(username, en_arrows))
+            print('-100 points!\nThank you for your purchase, {0}!\n+16 {1}'.format(username, en_arrows))
+    elif int(purchase_command_line) == 7:
+        item_tipped_arrows = 'Tipped errors'
+        if points < 150:
+            print('\n{0}ERROR: You do not have a sufficient amount of points for this item.\nItem: {1}{2}\n'.format(tcolors.red, item_tipped_arrows, tcolors.reset))
+        elif not points < 150:
+            tipped_arrows = tipped_arrows + 16
+            points = points - 150
+
+            print('-150 points!\nThank you for your purchase, {0}!\n+16 {1}'.format(username, item_tipped_arrows))
+
 
     else:
         pass
@@ -560,7 +579,8 @@ def inventory():
     global stamina_points
     global silver_sword
     global silver_sword_durability
-    print('Inventory:\n\nHealing Aura: {0}\nIron sword: {1} [{2}]\nSilver sword: {3} [{4}]\nBow: {5} [{6}]\nArrows [Regular]: {7}\nArrows [Enhanced]: {8}\n'.format(healing_aura, iron_sword, iron_sword_durability, silver_sword, silver_sword_durability, bow, bow_durability, arrows, enhanced_arrows))
+    global tipped_arrows
+    print('Inventory:\n\nHealing Aura: {0}\nIron sword: {1} [{2}]\nSilver sword: {3} [{4}]\nBow: {5} [{6}]\nArrows [Regular]: {7}\nArrows [Enhanced]: {8}\nTipped arrows [Poison]: {9}\n'.format(healing_aura, iron_sword, iron_sword_durability, silver_sword, silver_sword_durability, bow, bow_durability, arrows, enhanced_arrows, tipped_arrows))
 
 def use_item():
     global healing_aura
@@ -613,6 +633,7 @@ def battle():
     global iron_sword_durability
     global silver_sword
     global silver_sword_durability
+    global tipped_arrows
 
     battleOptions()
     select = input("\nSelect a battle option!\n\n{}: ".format(username))
@@ -626,6 +647,12 @@ def battle():
         print('\nYour health points as of now render for this session, as soon as your health points drop to 0%, that is game!\n')
 
         while training_hp > 0:
+            if naka_hp <= 0:
+                print('{0}Nakajima, Suzuko: You have bested me...well done...{1}'.format(tcolors.cyan, tcolors.reset))
+                training_bonus = 75
+                points = points + training_bonus
+                time.sleep(3)
+                print('You have won against Nakajima!\n+{} points!'.format(training_bonus))
             training_prompt = input("1. Attack [Weapon: Iron sword]\n2. Forfeit\n3. Attack [Weapon: Silver sword]\n4. Attack [Weapon: Bow]\n\n[{0}%] | Nakajima, Suzuko\n[{1}%] | {2}: ".format(naka_hp, training_hp, username))
 
             if int(training_prompt) == 1:
@@ -647,9 +674,9 @@ def battle():
                     naka_battle_quotes()
                     time.sleep(2)
                     training_hp = training_hp - pavedEdge_damage
-                    if pavedEdge_damage > 25:
+                    if pavedEdge_damage >= 20:
                         print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                    elif not pavedEdge_damage > 25:
+                    elif not pavedEdge_damage >= 20:
                         pass
                     print('{0}Nakajima attacked you using Paved Edge!\nYour health points for this session: {1}%{2}'.format(tcolors.grey, training_hp, tcolors.reset))
 
@@ -680,16 +707,16 @@ def battle():
                     naka_battle_quotes()
                     time.sleep(2)
                     training_hp = training_hp - pavedEdge_damage
-                    if pavedEdge_damage > 25:
+                    if pavedEdge_damage >= 20:
                         print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                    elif not pavedEdge_damage > 25:
+                    elif not pavedEdge_damage >= 20:
                         pass
                     print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
             elif int(training_prompt) == 4:
                 if bow <= 0:
                     print('{0}ERROR: You do not own a bow yet!{1}'.format(tcolors.red, tcolors.reset))
                 elif not bow <= 0:
-                    arrow_type = input("1. Regular\n2. Enhanced\n\nSelect arrow type: ")
+                    arrow_type = input("1. Regular\n2. Enhanced\n3. Tipped [Poison]\n\nSelect arrow type: ")
                     if int(arrow_type) == 1:
                         pavedEdge_damage = random.randint(15, 30)
                         point_gain = random.randint(12, 25)
@@ -710,12 +737,12 @@ def battle():
                         naka_battle_quotes()
                         time.sleep(2)
                         training_hp = training_hp - pavedEdge_damage
-                        if pavedEdge_damage > 25:
+                        if pavedEdge_damage >= 20:
                             print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                        elif not pavedEdge_damage > 25:
+                        elif not pavedEdge_damage >= 20:
                             pass
                         print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
-                    if int(arrow_type) == 2:
+                    elif int(arrow_type) == 2:
                         pavedEdge_damage = random.randint(15, 30)
                         point_gain = random.randint(14, 25)
                         enhanced_arrow_damage = random.randint(12, 20)
@@ -735,9 +762,35 @@ def battle():
                         naka_battle_quotes()
                         time.sleep(2)
                         training_hp = training_hp - pavedEdge_damage
-                        if pavedEdge_damage > 25:
+                        if pavedEdge_damage >= 20:
                             print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                        elif not pavedEdge_damage > 25:
+                        elif not pavedEdge_damage >= 20:
+                            pass
+                        print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                    elif int(arrow_type) == 3:
+                        pavedEdge_damage = random.randint(15, 30)
+                        point_gain = random.randint(14, 25)
+                        tipped_arrow_damage = random.randint(10, 20)
+                        bow_durability_loss = random.randint(15, 25)
+                        tipped_arrows = tipped_arrows - 1
+                        poison = random.randint(5, 10)
+
+                        naka_hp = naka_hp - tipped_arrow_damage - poison
+                        bow_durability = bow_durability - bow_durability_loss
+                        battle_xp = battle_xp + 5
+                        points = points + point_gain
+
+                        print('{0}You attacked Nakajima using a bow [Posion-tipped arrows]!\nNakajima\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+
+                        time.sleep(3)
+
+                        # Nakajima's battle quotes.
+                        naka_battle_quotes()
+                        time.sleep(2)
+                        training_hp = training_hp - pavedEdge_damage
+                        if pavedEdge_damage >= 20:
+                            print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                        elif not pavedEdge_damage >= 20:
                             pass
                         print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
 
