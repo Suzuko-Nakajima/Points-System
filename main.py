@@ -152,7 +152,7 @@ def sign_in_function():
                 time.sleep(7)
                 print(f"\n{tcolors.cyan}???: When you load in your data from a save file, you take damage and lose stamina points. Use the slash command, find \'shop\' and find the Healing Aura.\n???: Use it to regain some stamina points.{tcolors.reset}\n")
                 time.sleep(5)
-                print(f"\n{tcolors.green}[Guide obtained: Suzuko Nakajima]\n{tcolors.reset}")
+                print(f"\n{tcolors.green}[Guide obtained: Luaren]\n{tcolors.reset}")
                 time.sleep(10)
                 print(f"{tcolors.red}NOTICE: If your stamina points drop to 0, you will no longer be able to sign into your make-shift account!{tcolors.reset}")
     
@@ -400,7 +400,7 @@ def logout():
         if logout_dialogue >= 1:
             logout_dialogue = logout_dialogue - 1
 
-            print('{0}Nakajima, Suzuko: I will not repeat myself, SAVE ALL YOUR DATA BEFORE LOGGGING OUT. I just cannot stress myself enough about that.\n\nNOTICE: If you have not saved your data yet, save it now and then use the logout command again.{1}\n\n'.format(tcolors.cyan, tcolors.reset))
+            print('{0}Lauren: I will not repeat myself, SAVE ALL YOUR DATA BEFORE LOGGGING OUT. I just cannot stress myself enough about that.\n\nNOTICE: If you have not saved your data yet, save it now and then use the logout command again.{1}\n\n'.format(tcolors.cyan, tcolors.reset))
         elif logout_dialogue <= 0:
             print('Logging out...')
             exit()
@@ -452,6 +452,7 @@ def uun():
                     "healing aura stock": json_saveData['healing aura stock'],
                     "iron sword": json_saveData['iron sword'],
                     "iron sword durability": json_saveData['iron sword durability'],
+                    "logout dialogue": json_saveData['logout dialogue'],
                     "username": new_username,
                     "deposit": json_saveData['deposit'],
                     "points": json_saveData['points'],
@@ -603,10 +604,10 @@ def use_item():
                 print('Your stamina has been replinished to {}%!'.format(stamina_points))
 
 def battleOptions():
-    print("\n1. Training | Train against Nakajima. [Recommended level: 16]\n2. Quit battle.\nMore options coming soon.\n")
+    print("\n1. Training | Train against Lauren. [Recommended level: 16]\n2. Quit battle.\nMore options coming soon.\n")
 
 def naka_battle_quotes():
-    nakajimaBattleQuotes = random.choice([
+    laurenBattleQuotes = random.choice([
         "I cannot allow myself to fall here!",
         "Just you wait!",
         "I will try not to disappoint you!",
@@ -617,7 +618,7 @@ def naka_battle_quotes():
         "I will not hold back!"
     ])
 
-    print('{0}Nakajima, Suzuko: {2} {1}'.format(tcolors.cyan, nakajimaBattleQuotes, tcolors.reset))
+    print('{0}Lauren: {2} {1}'.format(tcolors.cyan, laurenBattleQuotes, tcolors.reset))
 
 
 def battle():
@@ -639,7 +640,7 @@ def battle():
     select = input("\nSelect a battle option!\n\n{}: ".format(username))
 
     if int(select) == 1:
-        print('\n{0}Nakajima, Suzuko: Wanting to train against me, huh? Very well then, suppose i cannot back down now.{1}\n'.format(tcolors.cyan, tcolors.reset))
+        print('\n{0}Lauren: Wanting to train against me, huh? Very well then, suppose i cannot back down now.{1}\n'.format(tcolors.cyan, tcolors.reset))
 
         training_hp = 100
         naka_hp = 100
@@ -648,151 +649,190 @@ def battle():
 
         while training_hp > 0:
             if naka_hp <= 0:
-                print('{0}Nakajima, Suzuko: You have bested me...well done...{1}'.format(tcolors.cyan, tcolors.reset))
-                training_bonus = 75
-                points = points + training_bonus
-                time.sleep(3)
-                print('You have won against Nakajima!\n+{} points!'.format(training_bonus))
-            training_prompt = input("1. Attack [Weapon: Iron sword]\n2. Forfeit\n3. Attack [Weapon: Silver sword]\n4. Attack [Weapon: Bow]\n\n[{0}%] | Nakajima, Suzuko\n[{1}%] | {2}: ".format(naka_hp, training_hp, username))
-
-            if int(training_prompt) == 1:
-                if iron_sword > 0:
-                    pavedEdge_damage = random.randint(15, 30)
-                    point_gain = random.randint(10, 25)
-                    iron_sword_damage = random.randint(3, 7)
-                    iron_sword_durability_loss = random.randint(10, 25)
-
-                    naka_hp = naka_hp - iron_sword_damage
-                    iron_sword_durability = iron_sword_durability - iron_sword_durability_loss
-                    battle_xp = battle_xp + 5
-                    points = points + point_gain
-
-                    print('{0}You attacked Nakajima using an iron sword!\nNakajima\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
-
-                    time.sleep(3)
-                    # Nakajima's battle quotes.
-                    naka_battle_quotes()
-                    time.sleep(2)
-                    training_hp = training_hp - pavedEdge_damage
-                    if pavedEdge_damage >= 20:
-                        print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                    elif not pavedEdge_damage >= 20:
-                        pass
-                    print('{0}Nakajima attacked you using Paved Edge!\nYour health points for this session: {1}%{2}'.format(tcolors.grey, training_hp, tcolors.reset))
-
-
-
-                elif not iron_sword > 0:
-                    print('{0}ERROR: There are no available iron swords in your inventory. Purchase some from the shop!{1}'.format(tcolors.red, tcolors.reset))
-            elif int(training_prompt) == 2:
-                print('Training cancelled!')
                 break
-            elif int(training_prompt) == 3:
-                if silver_sword > 0:
-                    pavedEdge_damage = random.randint(15, 30)
-                    point_gain = random.randint(10, 25)
-                    silver_sword_damage = random.randint(7, 20)
-                    silver_sword_durability_loss = random.randint(15, 25)
+            elif not naka_hp <= 0:
+                training_prompt = input("1. Attack [Weapon: Iron sword]\n2. Forfeit\n3. Attack [Weapon: Silver sword]\n4. Attack [Weapon: Bow]\n\n[{0}%] | Lauren\n[{1}%] | {2}: ".format(naka_hp, training_hp, username))
 
-                    naka_hp = naka_hp - silver_sword_damage
-                    silver_sword_durability = silver_sword_durability - silver_sword_durability_loss
-                    battle_xp = battle_xp + 5
-                    points = points + point_gain
-
-                    print('{0}You attacked Nakajima using a silver sword!\nNakajima\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
-
-                    time.sleep(3)
-
-                    # Nakajima's battle quotes.
-                    naka_battle_quotes()
-                    time.sleep(2)
-                    training_hp = training_hp - pavedEdge_damage
-                    if pavedEdge_damage >= 20:
-                        print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                    elif not pavedEdge_damage >= 20:
-                        pass
-                    print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
-            elif int(training_prompt) == 4:
-                if bow <= 0:
-                    print('{0}ERROR: You do not own a bow yet!{1}'.format(tcolors.red, tcolors.reset))
-                elif not bow <= 0:
-                    arrow_type = input("1. Regular\n2. Enhanced\n3. Tipped [Poison]\n\nSelect arrow type: ")
-                    if int(arrow_type) == 1:
+                if int(training_prompt) == 1:
+                    if iron_sword > 0:
                         pavedEdge_damage = random.randint(15, 30)
-                        point_gain = random.randint(12, 25)
-                        arrow_damage = random.randint(7, 14)
-                        bow_durability_loss = random.randint(15, 25)
-                        arrows = arrows - 1
+                        point_gain = random.randint(10, 25)
+                        iron_sword_damage = random.randint(3, 7)
+                        iron_sword_durability_loss = random.randint(10, 25)
 
-                        naka_hp = naka_hp - arrow_damage
-                        bow_durability = bow_durability - bow_durability_loss
+                        naka_hp = naka_hp - iron_sword_damage
+                        iron_sword_durability = iron_sword_durability - iron_sword_durability_loss
                         battle_xp = battle_xp + 5
                         points = points + point_gain
 
-                        print('{0}You attacked Nakajima using a bow [Regular arrows]!\nNakajima\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                        print('{0}You attacked Lauren using an iron sword!\Lauren\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                        time.sleep(3)
+                        if naka_hp <= 0:
+                            print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
 
-                        # Nakajima's battle quotes.
-                        naka_battle_quotes()
-                        time.sleep(2)
-                        training_hp = training_hp - pavedEdge_damage
-                        if pavedEdge_damage >= 20:
-                            print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                        elif not pavedEdge_damage >= 20:
-                            pass
-                        print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
-                    elif int(arrow_type) == 2:
+                            training_bonus = 75
+                            points = points + training_bonus
+                            time.sleep(3)
+                            print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+                        elif not naka_hp <= 0:
+
+                            time.sleep(3)
+                            # Luaren's battle quotes.
+                            naka_battle_quotes()
+                            time.sleep(2)
+                            training_hp = training_hp - pavedEdge_damage
+                            if pavedEdge_damage >= 20:
+                                print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                            elif not pavedEdge_damage >= 20:
+                                pass
+                            print('{0}Lauren attacked you using Paved Edge!\nYour health points for this session: {1}%{2}'.format(tcolors.grey, training_hp, tcolors.reset))
+
+
+
+                    elif not iron_sword > 0:
+                        print('{0}ERROR: There are no available iron swords in your inventory. Purchase some from the shop!{1}'.format(tcolors.red, tcolors.reset))
+                elif int(training_prompt) == 2:
+                    print('Training cancelled!')
+                    break
+                elif int(training_prompt) == 3:
+                    if silver_sword > 0:
                         pavedEdge_damage = random.randint(15, 30)
-                        point_gain = random.randint(14, 25)
-                        enhanced_arrow_damage = random.randint(12, 20)
-                        bow_durability_loss = random.randint(15, 25)
-                        enhanced_arrows = enhanced_arrows - 1
+                        point_gain = random.randint(10, 25)
+                        silver_sword_damage = random.randint(7, 20)
+                        silver_sword_durability_loss = random.randint(15, 25)
 
-                        naka_hp = naka_hp - enhanced_arrow_damage
-                        bow_durability = bow_durability - bow_durability_loss
+                        naka_hp = naka_hp - silver_sword_damage
+                        silver_sword_durability = silver_sword_durability - silver_sword_durability_loss
                         battle_xp = battle_xp + 5
                         points = points + point_gain
 
-                        print('{0}You attacked Nakajima using a bow [Enhanced arrows]!\nNakajima\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                        print('{0}You attacked Lauren using a silver sword!\Luaren\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                        time.sleep(3)
+                        if naka_hp <= 0:
+                            print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
 
-                        # Nakajima's battle quotes.
-                        naka_battle_quotes()
-                        time.sleep(2)
-                        training_hp = training_hp - pavedEdge_damage
-                        if pavedEdge_damage >= 20:
-                            print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                        elif not pavedEdge_damage >= 20:
-                            pass
-                        print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
-                    elif int(arrow_type) == 3:
-                        pavedEdge_damage = random.randint(15, 30)
-                        point_gain = random.randint(14, 25)
-                        tipped_arrow_damage = random.randint(10, 20)
-                        bow_durability_loss = random.randint(15, 25)
-                        tipped_arrows = tipped_arrows - 1
-                        poison = random.randint(5, 10)
+                            training_bonus = 75
+                            points = points + training_bonus
+                            time.sleep(3)
+                            print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+                        elif not naka_hp <= 0:
 
-                        naka_hp = naka_hp - tipped_arrow_damage - poison
-                        bow_durability = bow_durability - bow_durability_loss
-                        battle_xp = battle_xp + 5
-                        points = points + point_gain
+                            time.sleep(3)
 
-                        print('{0}You attacked Nakajima using a bow [Posion-tipped arrows]!\nNakajima\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                            # Lauren's battle quotes.
+                            naka_battle_quotes()
+                            time.sleep(2)
+                            training_hp = training_hp - pavedEdge_damage
+                            if pavedEdge_damage >= 20:
+                                print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                            elif not pavedEdge_damage >= 20:
+                                pass
+                            print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                elif int(training_prompt) == 4:
+                    if bow <= 0:
+                        print('{0}ERROR: You do not own a bow yet!{1}'.format(tcolors.red, tcolors.reset))
+                    elif not bow <= 0:
+                        arrow_type = input("1. Regular\n2. Enhanced\n3. Tipped [Poison]\n\nSelect arrow type: ")
+                        if int(arrow_type) == 1:
+                            pavedEdge_damage = random.randint(15, 30)
+                            point_gain = random.randint(12, 25)
+                            arrow_damage = random.randint(7, 14)
+                            bow_durability_loss = random.randint(15, 25)
+                            arrows = arrows - 1
 
-                        time.sleep(3)
+                            naka_hp = naka_hp - arrow_damage
+                            bow_durability = bow_durability - bow_durability_loss
+                            battle_xp = battle_xp + 5
+                            points = points + point_gain
 
-                        # Nakajima's battle quotes.
-                        naka_battle_quotes()
-                        time.sleep(2)
-                        training_hp = training_hp - pavedEdge_damage
-                        if pavedEdge_damage >= 20:
-                            print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                        elif not pavedEdge_damage >= 20:
-                            pass
-                        print('{0}Nakajima attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                            print('{0}You attacked Lauren using a bow [Regular arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+
+                            if naka_hp <= 0:
+                                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
+
+                                training_bonus = 75
+                                points = points + training_bonus
+                                time.sleep(3)
+                                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+                            elif not naka_hp <= 0:
+                                time.sleep(3)
+
+                                # Lauren's battle quotes.
+                                naka_battle_quotes()
+                                time.sleep(2)
+                                training_hp = training_hp - pavedEdge_damage
+                                if pavedEdge_damage >= 20:
+                                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                                elif not pavedEdge_damage >= 20:
+                                    pass
+                                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                        elif int(arrow_type) == 2:
+                            pavedEdge_damage = random.randint(15, 30)
+                            point_gain = random.randint(14, 25)
+                            enhanced_arrow_damage = random.randint(12, 20)
+                            bow_durability_loss = random.randint(15, 25)
+                            enhanced_arrows = enhanced_arrows - 1
+
+                            naka_hp = naka_hp - enhanced_arrow_damage
+                            bow_durability = bow_durability - bow_durability_loss
+                            battle_xp = battle_xp + 5
+                            points = points + point_gain
+
+                            print('{0}You attacked Lauren using a bow [Enhanced arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+
+                            if naka_hp <= 0:
+                                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
+
+                                training_bonus = 75
+                                points = points + training_bonus
+                                time.sleep(3)
+                                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+                            elif not naka_hp <= 0:
+                                time.sleep(3)
+
+                                # Lauren's battle quotes.
+                                naka_battle_quotes()
+                                time.sleep(2)
+                                training_hp = training_hp - pavedEdge_damage
+                                if pavedEdge_damage >= 20:
+                                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                                elif not pavedEdge_damage >= 20:
+                                    pass
+                                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                        elif int(arrow_type) == 3:
+                            pavedEdge_damage = random.randint(15, 30)
+                            point_gain = random.randint(14, 25)
+                            tipped_arrow_damage = random.randint(10, 20)
+                            bow_durability_loss = random.randint(15, 25)
+                            tipped_arrows = tipped_arrows - 1
+                            poison = random.randint(5, 10)
+
+                            naka_hp = naka_hp - tipped_arrow_damage - poison
+                            bow_durability = bow_durability - bow_durability_loss
+                            battle_xp = battle_xp + 5
+                            points = points + point_gain
+
+                            print('{0}You attacked Lauren using a bow [Posion-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+
+                            if naka_hp <= 0:
+                                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
+
+                                training_bonus = 75
+                                points = points + training_bonus
+                                time.sleep(3)
+                                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+                            elif not naka_hp <= 0:
+                                time.sleep(3)
+
+                                # Lauren's battle quotes.
+                                naka_battle_quotes()
+                                time.sleep(2)
+                                training_hp = training_hp - pavedEdge_damage
+                                if pavedEdge_damage >= 20:
+                                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                                elif not pavedEdge_damage >= 20:
+                                    pass
+                                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
 
         
         if training_hp <= 0:
@@ -803,7 +843,7 @@ def battle():
 
 
     elif int(select) == 2:
-        print('{0}Nakajima, Suzuko: So, not starting quite yet?{1}'.format(tcolors.cyan, tcolors.reset))
+        print('{0}Lauren: So, not starting quite yet?{1}'.format(tcolors.cyan, tcolors.reset))
 
 
 

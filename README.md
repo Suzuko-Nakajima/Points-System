@@ -25,3 +25,6 @@ This repository is another small project of mine, I'm putting all I know about P
 - Added new items!
 - Added colored text to Nakajima's dialogue!
 - Train against Nakajima to earn more points and new battle experience!
+
+## Update v2021.4.28.4
+- Training sessions are now playable in terms of winning, not just losing.
