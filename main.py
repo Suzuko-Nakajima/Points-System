@@ -473,7 +473,7 @@ def uun():
             print('ERROR: Password is incorrect.')
 
 def shop():
-    print('Items:\n\n1. Healing Aura | [75]\n2. Iron sword | [150]\n3. Silver sword | [250]\n4. Bow\n5. Arrows [Regular]\n6. Arrows [Enhanced]\n7. Tipped arrows [Poison]\n')
+    print('Items:\n\n1. Healing Aura | [75]\n2. Iron sword | [150]\n3. Silver sword | [250]\n4. Bow [400]\n5. Arrows (regular) [50]\n6. Arrows (Enhanced) [100]\n7. Tipped arrows (Poison) [200]\n')
 
 def purchase():
     global arrows
@@ -557,14 +557,14 @@ def purchase():
 
             print('-100 points!\nThank you for your purchase, {0}!\n+16 {1}'.format(username, en_arrows))
     elif int(purchase_command_line) == 7:
-        item_tipped_arrows = 'Tipped errors'
-        if points < 150:
+        item_tipped_arrows = 'Tipped arrows'
+        if points < 250:
             print('\n{0}ERROR: You do not have a sufficient amount of points for this item.\nItem: {1}{2}\n'.format(tcolors.red, item_tipped_arrows, tcolors.reset))
-        elif not points < 150:
+        elif not points < 250:
             tipped_arrows = tipped_arrows + 16
-            points = points - 150
+            points = points - 250
 
-            print('-150 points!\nThank you for your purchase, {0}!\n+16 {1}'.format(username, item_tipped_arrows))
+            print('-250 points!\nThank you for your purchase, {0}!\n+16 {1}'.format(username, item_tipped_arrows))
 
 
     else:
@@ -647,6 +647,33 @@ def battle():
 
         print('\nYour health points as of now render for this session, as soon as your health points drop to 0%, that is game!\n')
 
+        def training_laurenHP():
+            global battle_xp
+            global points
+            nonlocal training_hp
+            nonlocal naka_hp
+            if naka_hp <= 0:
+                time.sleep(3)
+                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
+
+                training_bonus = 75
+                points = points + training_bonus
+                time.sleep(3)
+                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+            elif not naka_hp <= 0:
+                time.sleep(3)
+
+                # Lauren's battle quotes.
+                naka_battle_quotes()
+                time.sleep(2)
+                training_hp = training_hp - pavedEdge_damage
+                if pavedEdge_damage >= 20:
+                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                elif not pavedEdge_damage >= 20:
+                    pass
+
+                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+
         while training_hp > 0:
             if naka_hp <= 0:
                 break
@@ -667,25 +694,7 @@ def battle():
 
                         print('{0}You attacked Lauren using an iron sword!\Lauren\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                        if naka_hp <= 0:
-                            print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
-
-                            training_bonus = 75
-                            points = points + training_bonus
-                            time.sleep(3)
-                            print('You have won against Lauren!\n+{} points!'.format(training_bonus))
-                        elif not naka_hp <= 0:
-
-                            time.sleep(3)
-                            # Luaren's battle quotes.
-                            naka_battle_quotes()
-                            time.sleep(2)
-                            training_hp = training_hp - pavedEdge_damage
-                            if pavedEdge_damage >= 20:
-                                print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                            elif not pavedEdge_damage >= 20:
-                                pass
-                            print('{0}Lauren attacked you using Paved Edge!\nYour health points for this session: {1}%{2}'.format(tcolors.grey, training_hp, tcolors.reset))
+                        training_laurenHP()
 
 
 
@@ -708,26 +717,8 @@ def battle():
 
                         print('{0}You attacked Lauren using a silver sword!\Luaren\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                        if naka_hp <= 0:
-                            print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
+                        training_laurenHP()
 
-                            training_bonus = 75
-                            points = points + training_bonus
-                            time.sleep(3)
-                            print('You have won against Lauren!\n+{} points!'.format(training_bonus))
-                        elif not naka_hp <= 0:
-
-                            time.sleep(3)
-
-                            # Lauren's battle quotes.
-                            naka_battle_quotes()
-                            time.sleep(2)
-                            training_hp = training_hp - pavedEdge_damage
-                            if pavedEdge_damage >= 20:
-                                print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                            elif not pavedEdge_damage >= 20:
-                                pass
-                            print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
                 elif int(training_prompt) == 4:
                     if bow <= 0:
                         print('{0}ERROR: You do not own a bow yet!{1}'.format(tcolors.red, tcolors.reset))
@@ -747,25 +738,7 @@ def battle():
 
                             print('{0}You attacked Lauren using a bow [Regular arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                            if naka_hp <= 0:
-                                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
-
-                                training_bonus = 75
-                                points = points + training_bonus
-                                time.sleep(3)
-                                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
-                            elif not naka_hp <= 0:
-                                time.sleep(3)
-
-                                # Lauren's battle quotes.
-                                naka_battle_quotes()
-                                time.sleep(2)
-                                training_hp = training_hp - pavedEdge_damage
-                                if pavedEdge_damage >= 20:
-                                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                                elif not pavedEdge_damage >= 20:
-                                    pass
-                                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                            training_laurenHP
                         elif int(arrow_type) == 2:
                             pavedEdge_damage = random.randint(15, 30)
                             point_gain = random.randint(14, 25)
@@ -780,25 +753,7 @@ def battle():
 
                             print('{0}You attacked Lauren using a bow [Enhanced arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                            if naka_hp <= 0:
-                                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
-
-                                training_bonus = 75
-                                points = points + training_bonus
-                                time.sleep(3)
-                                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
-                            elif not naka_hp <= 0:
-                                time.sleep(3)
-
-                                # Lauren's battle quotes.
-                                naka_battle_quotes()
-                                time.sleep(2)
-                                training_hp = training_hp - pavedEdge_damage
-                                if pavedEdge_damage >= 20:
-                                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                                elif not pavedEdge_damage >= 20:
-                                    pass
-                                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                            training_laurenHP
                         elif int(arrow_type) == 3:
                             pavedEdge_damage = random.randint(15, 30)
                             point_gain = random.randint(14, 25)
@@ -814,25 +769,7 @@ def battle():
 
                             print('{0}You attacked Lauren using a bow [Posion-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
 
-                            if naka_hp <= 0:
-                                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
-
-                                training_bonus = 75
-                                points = points + training_bonus
-                                time.sleep(3)
-                                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
-                            elif not naka_hp <= 0:
-                                time.sleep(3)
-
-                                # Lauren's battle quotes.
-                                naka_battle_quotes()
-                                time.sleep(2)
-                                training_hp = training_hp - pavedEdge_damage
-                                if pavedEdge_damage >= 20:
-                                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
-                                elif not pavedEdge_damage >= 20:
-                                    pass
-                                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                            training_laurenHP()
 
         
         if training_hp <= 0:
