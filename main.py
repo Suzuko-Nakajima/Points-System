@@ -795,7 +795,7 @@ def battle():
 
             while userHP > 0:
                 if thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
-                    print('All targes have been defeated!')
+                    print('All targets have been defeated!')
                     break
                 elif not thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
                     bp.player()
