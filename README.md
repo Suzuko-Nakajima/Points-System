@@ -5,12 +5,13 @@ This repository is another small project of mine, I'm putting all I know about P
 ## For Those Who'd Like To Use The Program:
 **REQUIREMENTS:** (For local machines/terminals)
 - You must have Python installed on your machine.
+- Online IDEs should already have Python installed.
 
 **HOW TO USE:**
 - You can initiate the project either on your computer or on an online IDE editor using `python3 main.py` in the command line (Please make sure you have Python installed if you are running this code locally on your computer!).
 - Next, choose the "Sign-up" option and create a unique and memorable sign-in ID for you to sign back into your make-shift account.
 - Create a password, do not forget it!
-** After entering the information, you'll be ready to go! When you are asked if you want to claim bonus points, I recommend you claim them!
+--> After entering the information, you'll be ready to go! When you are asked if you want to claim bonus points, I recommend you claim them!
 * LAST: "Slash" commands are available, view them with "/help".
 
 ---

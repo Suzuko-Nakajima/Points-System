@@ -7,27 +7,9 @@ import random
 import time
 import datetime
 import uuid
-
-class tcolors:
-    cyan = '\033[96m'
-    reset = '\033[0m'
-    bold = '\033[1m'
-    grey = '\033[2m'
-    italics = '\033[3m'
-    underline = '\033[4m'
-    whiteHighlight = '\033[7m'
-    red = '\033[91m'
-    green = '\033[92m'
-    yellow = '\033[93m'
-    blue = '\033[94m'
-    purple = '\033[95m'
-    redHighlight = '\033[101m'
-    greenHighlight = '\033[102m'
-    yellowHighlight = '\033[103m'
-    blueHighlight = '\033[104m'
-    purpleHighlight = '\033[105m'
-    cyanHighlight = '\033[106m'
-    whiteHighlight = '\033[107m'
+from nakacmdline import cmdlinetxtcolors as c
+from nakacmdline import people as p
+from nakacmdline import battlePhases as bp
 
 if not os.path.exists('assets/users'):
     os.mkdir('assets')
@@ -93,7 +75,7 @@ def sign_in_function():
     if int(sign_in_option) == 1:
         sign_in_id = input("[Sign-in] | Enter sign-in ID: ")
         if not os.path.exists('assets/users/{}/sign_in_data.json'.format(sign_in_id)):
-            print("{0}ERROR: This account isn't a registered user!, feel free to claim!{1}".format(tcolors.yellow, tcolors.reset))
+            print("{0}ERROR: This account isn't a registered user!, feel free to claim!{1}".format(c.tcolors.yellow, c.tcolors.reset))
             exit()
         elif os.path.exists('assets/users/{}/sign_in_data.json'.format(sign_in_id)):
             pass
@@ -118,7 +100,7 @@ def sign_in_function():
     elif int(sign_in_option) == 2:
         sign_in_id = input("[Sign-up] | Create unique sign-in ID: ")
         if len(sign_in_id) > charlimit:
-            print('{0}ERROR: Your sign-in ID cannot exceed over {1} character(s)!{2}'.format(tcolors.red, charlimit, tcolors.reset))
+            print('{0}ERROR: Your sign-in ID cannot exceed over {1} character(s)!{2}'.format(c.tcolors.red, charlimit, c.tcolors.reset))
             exit()
         elif len(sign_in_id) <= charlimit:
             username = input("[Sign-up] | Choose username: ")
@@ -146,15 +128,15 @@ def sign_in_function():
             with open('assets/users/{}/sign_in_data.json'.format(sign_in_id), 'w+') as file:
                 json.dump(sign_in_data, file, indent = 4, sort_keys = True)
 
-                print(f"\n{tcolors.cyan}???: A newcomer?{tcolors.reset}\n")
+                print(f"\n{c.tcolors.cyan}???: A newcomer?{c.tcolors.reset}\n")
                 time.sleep(3)
-                print(f"\n{tcolors.cyan}???: You\'re probably new to the command line, at least this one.\n\n???: Before I let you go, do not forget about slash commands, they are available every time you sign-in. I will not overwhelm you with all the details, I will help along the way.{tcolors.reset}\n")
+                print(f"\n{c.tcolors.cyan}???: You\'re probably new to the command line, at least this one.\n\n???: Before I let you go, do not forget about slash commands, they are available every time you sign-in. I will not overwhelm you with all the details, I will help along the way.{c.tcolors.reset}\n")
                 time.sleep(7)
-                print(f"\n{tcolors.cyan}???: When you load in your data from a save file, you take damage and lose stamina points. Use the slash command, find \'shop\' and find the Healing Aura.\n???: Use it to regain some stamina points.{tcolors.reset}\n")
+                print(f"\n{c.tcolors.cyan}???: When you load in your data from a save file, you take damage and lose stamina points. Use the slash command, find \'shop\' and find the Healing Aura.\n???: Use it to regain some stamina points.{c.tcolors.reset}\n")
                 time.sleep(5)
-                print(f"\n{tcolors.green}[Guide obtained: Luaren]\n{tcolors.reset}")
+                print(f"\n{c.tcolors.green}[Guide obtained: Luaren]\n{c.tcolors.reset}")
                 time.sleep(10)
-                print(f"{tcolors.red}NOTICE: If your stamina points drop to 0, you will no longer be able to sign into your make-shift account!{tcolors.reset}")
+                print(f"{c.tcolors.red}NOTICE: If your stamina points drop to 0, you will no longer be able to sign into your make-shift account!{c.tcolors.reset}")
     
 
 
@@ -202,9 +184,9 @@ def depos():
     deposit_in_bank = input("How much would you like to deposit?\n{}: ".format(username))
 
     if int(deposit_in_bank) > points:
-        print('\n{0}ERROR: You cannot deposit more than what you have!{1}\nYour point balance is: {2}\n'.format(tcolors.red, tcolors.reset, points))
+        print('\n{0}ERROR: You cannot deposit more than what you have!{1}\nYour point balance is: {2}\n'.format(c.tcolors.red, c.tcolors.reset, points))
     elif int(deposit_in_bank) < 1:
-        print('\n{0}ERROR: You cannot deposit any points below 1!{1}\nYour point balance is: {2}\n'.format(tcolors.red, tcolors.reset, points))
+        print('\n{0}ERROR: You cannot deposit any points below 1!{1}\nYour point balance is: {2}\n'.format(c.tcolors.red, c.tcolors.reset, points))
     else:
         deposit = deposit + int(deposit_in_bank)
         points = points - int(deposit_in_bank)
@@ -218,9 +200,9 @@ def withdraw():
     withdraw_from_bank = input("How much would you like to withdraw?\nYour deposited points: {0}\n{1}: ".format(deposit, username))
 
     if int(withdraw_from_bank) > deposit:
-        print('\n{0}ERROR: You cannot withdraw more than you have deposited!{1}\n'.format(tcolors.red, tcolors.reset))
+        print('\n{0}ERROR: You cannot withdraw more than you have deposited!{1}\n'.format(c.tcolors.red, c.tcolors.reset))
     elif int(withdraw_from_bank) < 1:
-        print('\n{0}ERROR: You cannot withdraw points less than 1.{1}\n'.format(tcolors.red, tcolors.reset))
+        print('\n{0}ERROR: You cannot withdraw points less than 1.{1}\n'.format(c.tcolors.red, c.tcolors.reset))
     else:
         points = points + int(withdraw_from_bank)
         deposit = deposit - int(withdraw_from_bank)
@@ -333,10 +315,10 @@ def load_data():
             tipped_arrows = data['tipped arrows']
 
             if stamina_points <= 0:
-                print('{0}ERROR: You no longer have enough stamina points to load in your data.{1}\nStamina points: {2}%'.format(tcolors.red, tcolors.reset, stamina_points))
+                print('{0}ERROR: You no longer have enough stamina points to load in your data.{1}\nStamina points: {2}%'.format(c.tcolors.red, c.tcolors.reset, stamina_points))
                 exit()
             elif not stamina_points <= 0:
-                print('\n{0}All your data has been loaded, {1}!{2}\n'.format(tcolors.green, username, tcolors.reset))
+                print('\n{0}All your data has been loaded, {1}!{2}\n'.format(c.tcolors.green, username, c.tcolors.reset))
 
                 file.close()
 
@@ -395,12 +377,12 @@ def logout():
     global stamina_points
     global tipped_arrows
     global logout_dialogue
-    confirm_logout = input("\n{0}Make sure all your progress is saved!\nAre you sure you want to log out?\n(1. Yes | 2. No): {1}".format(tcolors.grey, tcolors.reset))
+    confirm_logout = input("\n{0}Make sure all your progress is saved!\nAre you sure you want to log out?\n(1. Yes | 2. No): {1}".format(c.tcolors.grey, c.tcolors.reset))
     if int(confirm_logout) == 1:
         if logout_dialogue >= 1:
             logout_dialogue = logout_dialogue - 1
 
-            print('{0}Lauren: I will not repeat myself, SAVE ALL YOUR DATA BEFORE LOGGGING OUT. I just cannot stress myself enough about that.\n\nNOTICE: If you have not saved your data yet, save it now and then use the logout command again.{1}\n\n'.format(tcolors.cyan, tcolors.reset))
+            print('{0}{1}: I will not repeat myself, SAVE ALL YOUR DATA BEFORE LOGGGING OUT. I just cannot stress myself enough about that.\n\nNOTICE: If you have not saved your data yet, save it now and then use the logout command again.{2}\n\n'.format(c.tcolors.cyan, p.npc.lauren, c.tcolors.reset))
         elif logout_dialogue <= 0:
             print('Logging out...')
             exit()
@@ -493,9 +475,9 @@ def purchase():
     if int(purchase_command_line) == 1:
         item = "Healing Aura"
         if healing_aura_stock < 1:
-            print('\n{0}ERROR: This item is out of stock!{1}'.format(tcolors.red, tcolors.reset))
+            print('\n{0}ERROR: This item is out of stock!{1}'.format(c.tcolors.red, c.tcolors.reset))
         elif points < 75:
-            print('\n{0}ERROR: You do not have a sufficient amount of funds!{1}\n'.format(tcolors.red, tcolors.reset))
+            print('\n{0}ERROR: You do not have a sufficient amount of funds!{1}\n'.format(c.tcolors.red, c.tcolors.reset))
         elif not healing_aura_stock < 1 and not points < 75:
             healing_aura_stock = healing_aura_stock - 1
             healing_aura = healing_aura + 1
@@ -505,9 +487,9 @@ def purchase():
     elif int(purchase_command_line) == 2:
         item_iron_sword = "Iron sword"
         if points < 150:
-            print('\n{0}ERROR: You do not have enough points to purchase this item.{1}\n | [{2}]'.format(tcolors.red, tcolors.reset, item_iron_sword))
+            print('\n{0}ERROR: You do not have enough points to purchase this item.{1}\n | [{2}]'.format(c.tcolors.red, c.tcolors.reset, item_iron_sword))
         elif iron_sword > 0:
-            print('\n{0}ERROR: You already have this item.{1}\n | [{2}]'.format(tcolors.red, tcolors.reset, item_iron_sword))
+            print('\n{0}ERROR: You already have this item.{1}\n | [{2}]'.format(c.tcolors.red, c.tcolors.reset, item_iron_sword))
         elif not points < 150 and not iron_sword > 0:
             iron_sword = iron_sword + 1
             iron_sword_durability = iron_sword_durability + 1000
@@ -517,9 +499,9 @@ def purchase():
     elif int(purchase_command_line) == 3:
         item_silver_sword = 'Silver sword'
         if points < 250:
-            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(tcolors.red, item_silver_sword, tcolors.reset))
+            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(c.tcolors.red, item_silver_sword, c.tcolors.reset))
         elif silver_sword > 0:
-            print('\n{0}ERROR: You already have this item!\nItem: {1}{2}\n'.format(tcolors.red, item_silver_sword, tcolors.reset))
+            print('\n{0}ERROR: You already have this item!\nItem: {1}{2}\n'.format(c.tcolors.red, item_silver_sword, c.tcolors.reset))
         elif not points < 250 and not silver_sword > 0:
             silver_sword = silver_sword + 1
             silver_sword_durability = silver_sword_durability + 2000
@@ -529,9 +511,9 @@ def purchase():
     elif int(purchase_command_line) == 4:
         item_bow = 'Bow'
         if points < 400:
-            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(tcolors.red, item_bow, tcolors.reset))
+            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(c.tcolors.red, item_bow, c.tcolors.reset))
         elif bow > 0:
-            print('\n{0}ERROR: You already have this item!\nItem: {1}{2}\n'.format(tcolors.red, item_bow, tcolors.reset))
+            print('\n{0}ERROR: You already have this item!\nItem: {1}{2}\n'.format(c.tcolors.red, item_bow, c.tcolors.reset))
         elif not points < 400 and not bow > 0:
             bow = bow + 1
             bow_durability = bow_durability + 3000
@@ -541,7 +523,7 @@ def purchase():
     elif int(purchase_command_line) == 5:
         item_arrows = 'Arrows'
         if points < 50:
-            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(tcolors.red, item_arrows, tcolors.reset))
+            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(c.tcolors.red, item_arrows, c.tcolors.reset))
         elif not points < 400:
             arrows = arrows + 16
             points = points - 50
@@ -550,7 +532,7 @@ def purchase():
     elif int(purchase_command_line) == 6:
         en_arrows = 'Enhanced arrows'
         if points < 100:
-            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(tcolors.red, en_arrows, tcolors.reset))
+            print('\n{0}ERROR: You do not have a sufficient amount of points for this purchase.\nItem: {1}{2}\n'.format(c.tcolors.red, en_arrows, c.tcolors.reset))
         elif not points < 100:
             enhanced_arrows = enhanced_arrows + 16
             points = points - 100
@@ -559,7 +541,7 @@ def purchase():
     elif int(purchase_command_line) == 7:
         item_tipped_arrows = 'Tipped arrows'
         if points < 250:
-            print('\n{0}ERROR: You do not have a sufficient amount of points for this item.\nItem: {1}{2}\n'.format(tcolors.red, item_tipped_arrows, tcolors.reset))
+            print('\n{0}ERROR: You do not have a sufficient amount of points for this item.\nItem: {1}{2}\n'.format(c.tcolors.red, item_tipped_arrows, c.tcolors.reset))
         elif not points < 250:
             tipped_arrows = tipped_arrows + 16
             points = points - 250
@@ -604,7 +586,7 @@ def use_item():
                 print('Your stamina has been replinished to {}%!'.format(stamina_points))
 
 def battleOptions():
-    print("\n1. Training | Train against Lauren. [Recommended level: 16]\n2. Quit battle.\nMore options coming soon.\n")
+    print(f"\n1. Training | Train against {p.npc.lauren}. [Recommended level: 16]\n2. Quit battle.\n3. Ruins Haven - Fight low-level thieves.\nMore options coming soon.\n")
 
 def naka_battle_quotes():
     laurenBattleQuotes = random.choice([
@@ -615,10 +597,11 @@ def naka_battle_quotes():
         "I'll make this quick!",
         "I won't ask you to forgive me!",
         "I have no remorse!",
-        "I will not hold back!"
+        "I will not hold back!",
+        "This is as easy as it gets!"
     ])
 
-    print('{0}Lauren: {2} {1}'.format(tcolors.cyan, laurenBattleQuotes, tcolors.reset))
+    print('{0}{3}: {2} {1}'.format(c.tcolors.cyan, laurenBattleQuotes, c.tcolors.reset, p.npc.lauren))
 
 
 def battle():
@@ -640,7 +623,7 @@ def battle():
     select = input("\nSelect a battle option!\n\n{}: ".format(username))
 
     if int(select) == 1:
-        print('\n{0}Lauren: Wanting to train against me, huh? Very well then, suppose i cannot back down now.{1}\n'.format(tcolors.cyan, tcolors.reset))
+        print('\n{0}{2}: Wanting to train against me, huh? Very well then, suppose i cannot back down now.{1}\n'.format(c.tcolors.cyan, c.tcolors.reset, p.npc.lauren))
 
         training_hp = 100
         naka_hp = 100
@@ -654,37 +637,38 @@ def battle():
             nonlocal naka_hp
             if naka_hp <= 0:
                 time.sleep(3)
-                print('{0}Lauren: I guess you have bested me...well done.{1}'.format(tcolors.cyan, tcolors.reset))
+                print('{0}{1}: I guess you have bested me...well done.{2}'.format(c.tcolors.cyan, p.npc.lauren, c.tcolors.reset))
 
                 training_bonus = 75
                 points = points + training_bonus
                 time.sleep(3)
-                print('You have won against Lauren!\n+{} points!'.format(training_bonus))
+                print('You have won against {0}!\n+{1} points!'.format(p.npc.lauren, training_bonus))
             elif not naka_hp <= 0:
                 time.sleep(3)
 
                 # Lauren's battle quotes.
                 naka_battle_quotes()
+                pavedEdge_damage = random.randint(15, 30)
                 time.sleep(2)
                 training_hp = training_hp - pavedEdge_damage
                 if pavedEdge_damage >= 20:
-                    print('{0}{1}CRITICAL HIT!{2}'.format(tcolors.red, tcolors.bold, tcolors.reset))
+                    print('{0}{1}CRITICAL HIT!{2}'.format(c.tcolors.red, c.tcolors.bold, c.tcolors.reset))
                 elif not pavedEdge_damage >= 20:
                     pass
 
-                print('{0}Lauren attacked you using Paved Edge!\nDamage dealt: {1}%{2}'.format(tcolors.grey, pavedEdge_damage, tcolors.reset))
+                print('{0}{1} attacked you using Paved Edge!\nDamage dealt: {2}%{3}'.format(c.tcolors.grey, p.npc.lauren, pavedEdge_damage, c.tcolors.reset))
 
         while training_hp > 0:
             if naka_hp <= 0:
                 break
             elif not naka_hp <= 0:
-                training_prompt = input("1. Attack [Weapon: Iron sword]\n2. Forfeit\n3. Attack [Weapon: Silver sword]\n4. Attack [Weapon: Bow]\n\n[{0}%] | Lauren\n[{1}%] | {2}: ".format(naka_hp, training_hp, username))
+                bp.player()
+                training_prompt = input("1. Attack [Weapon: Iron sword]\n2. Forfeit\n3. Attack [Weapon: Silver sword]\n4. Attack [Weapon: Bow]\n\n[{0}%] | {1}\n[{2}%] | {3}: ".format(naka_hp, p.npc.lauren, training_hp, username))
 
                 if int(training_prompt) == 1:
                     if iron_sword > 0:
-                        pavedEdge_damage = random.randint(15, 30)
                         point_gain = random.randint(10, 25)
-                        iron_sword_damage = random.randint(3, 7)
+                        iron_sword_damage = random.randint(5, 10)
                         iron_sword_durability_loss = random.randint(10, 25)
 
                         naka_hp = naka_hp - iron_sword_damage
@@ -692,22 +676,24 @@ def battle():
                         battle_xp = battle_xp + 5
                         points = points + point_gain
 
-                        print('{0}You attacked Lauren using an iron sword!\Lauren\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                        print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.lauren, naka_hp, point_gain, c.tcolors.reset))
 
+                        # Enemy phase.
+                        bp.enemy()
                         training_laurenHP()
 
 
 
                     elif not iron_sword > 0:
-                        print('{0}ERROR: There are no available iron swords in your inventory. Purchase some from the shop!{1}'.format(tcolors.red, tcolors.reset))
+                        print('{0}ERROR: There are no available iron swords in your inventory. Purchase some from the shop!{1}'.format(c.tcolors.red, c.tcolors.reset))
                 elif int(training_prompt) == 2:
                     print('Training cancelled!')
                     break
                 elif int(training_prompt) == 3:
                     if silver_sword > 0:
-                        pavedEdge_damage = random.randint(15, 30)
+                        # pavedEdge_damage = random.randint(15, 30)
                         point_gain = random.randint(10, 25)
-                        silver_sword_damage = random.randint(7, 20)
+                        silver_sword_damage = random.randint(10, 16)
                         silver_sword_durability_loss = random.randint(15, 25)
 
                         naka_hp = naka_hp - silver_sword_damage
@@ -715,61 +701,78 @@ def battle():
                         battle_xp = battle_xp + 5
                         points = points + point_gain
 
-                        print('{0}You attacked Lauren using a silver sword!\Luaren\'s health points: {1}\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                        print('{0}You attacked Lauren using a silver sword!\Luaren\'s health points: {1}\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
 
+                        # Enemy phase.
+                        bp.enemy()
                         training_laurenHP()
 
                 elif int(training_prompt) == 4:
                     if bow <= 0:
-                        print('{0}ERROR: You do not own a bow yet!{1}'.format(tcolors.red, tcolors.reset))
+                        print('{0}ERROR: You do not own a bow yet!{1}'.format(c.tcolors.red, c.tcolors.reset))
                     elif not bow <= 0:
                         arrow_type = input("1. Regular\n2. Enhanced\n3. Tipped [Poison]\n\nSelect arrow type: ")
                         if int(arrow_type) == 1:
-                            pavedEdge_damage = random.randint(15, 30)
-                            point_gain = random.randint(12, 25)
-                            arrow_damage = random.randint(7, 14)
-                            bow_durability_loss = random.randint(15, 25)
-                            arrows = arrows - 1
+                            if arrows <= 0:
+                                print('{0}ERROR: You do not have any arrows (regular)!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                            elif not arrows <= 0:
+                                # pavedEdge_damage = random.randint(15, 30)
+                                point_gain = random.randint(12, 25)
+                                arrow_damage = random.randint(7, 14)
+                                bow_durability_loss = random.randint(15, 25)
+                                arrows = arrows - 1
 
-                            naka_hp = naka_hp - arrow_damage
-                            bow_durability = bow_durability - bow_durability_loss
-                            battle_xp = battle_xp + 5
-                            points = points + point_gain
+                                naka_hp = naka_hp - arrow_damage
+                                bow_durability = bow_durability - bow_durability_loss
+                                battle_xp = battle_xp + 5
+                                points = points + point_gain
 
-                            print('{0}You attacked Lauren using a bow [Regular arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                                print('{0}You attacked Lauren using a bow [Regular arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
 
-                            training_laurenHP
+                                # Enemy phase
+                                bp.enemy()
+                                training_laurenHP()
                         elif int(arrow_type) == 2:
-                            pavedEdge_damage = random.randint(15, 30)
-                            point_gain = random.randint(14, 25)
-                            enhanced_arrow_damage = random.randint(12, 20)
-                            bow_durability_loss = random.randint(15, 25)
-                            enhanced_arrows = enhanced_arrows - 1
+                            if enhanced_arrows <= 0:
+                                print('{0}ERROR: You do not have any enhanced arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                            elif not enhanced_arrows <= 0:
+                                # pavedEdge_damage = random.randint(15, 30)
+                                point_gain = random.randint(14, 25)
+                                enhanced_arrow_damage = random.randint(12, 20)
+                                bow_durability_loss = random.randint(15, 25)
+                                enhanced_arrows = enhanced_arrows - 1
 
-                            naka_hp = naka_hp - enhanced_arrow_damage
-                            bow_durability = bow_durability - bow_durability_loss
-                            battle_xp = battle_xp + 5
-                            points = points + point_gain
+                                naka_hp = naka_hp - enhanced_arrow_damage
+                                bow_durability = bow_durability - bow_durability_loss
+                                battle_xp = battle_xp + 5
+                                points = points + point_gain
 
-                            print('{0}You attacked Lauren using a bow [Enhanced arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                                print('{0}You attacked Lauren using a bow [Enhanced arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
 
-                            training_laurenHP
+                                # Enemy phase.
+                                bp.enemy()
+                                training_laurenHP()
                         elif int(arrow_type) == 3:
-                            pavedEdge_damage = random.randint(15, 30)
-                            point_gain = random.randint(14, 25)
-                            tipped_arrow_damage = random.randint(10, 20)
-                            bow_durability_loss = random.randint(15, 25)
-                            tipped_arrows = tipped_arrows - 1
-                            poison = random.randint(5, 10)
+                            if tipped_arrows <= 0:
+                                 print('{0}ERROR: You do not have any tipped arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                            elif not tipped_arrows <= 0:
+                                # Player phase
+                                point_gain = random.randint(14, 25)
+                                tipped_arrow_damage = random.randint(10, 20)
+                                bow_durability_loss = random.randint(15, 25)
+                                tipped_arrows = tipped_arrows - 1
+                                poison = random.randint(5, 10)
 
-                            naka_hp = naka_hp - tipped_arrow_damage - poison
-                            bow_durability = bow_durability - bow_durability_loss
-                            battle_xp = battle_xp + 5
-                            points = points + point_gain
+                                naka_hp = naka_hp - tipped_arrow_damage - poison
+                                bow_durability = bow_durability - bow_durability_loss
+                                battle_xp = battle_xp + 5
+                                points = points + point_gain
 
-                            print('{0}You attacked Lauren using a bow [Posion-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(tcolors.yellow, naka_hp, point_gain, tcolors.reset))
+                                print('{0}You attacked Lauren using a bow [Poison-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
 
-                            training_laurenHP()
+                                # Enemy phase.
+                                bp.enemy()
+                                training_laurenHP()
 
         
         if training_hp <= 0:
@@ -780,7 +783,174 @@ def battle():
 
 
     elif int(select) == 2:
-        print('{0}Lauren: So, not starting quite yet?{1}'.format(tcolors.cyan, tcolors.reset))
+        print('{0}Lauren: So, not starting quite yet?{1}'.format(c.tcolors.cyan, c.tcolors.reset))
+    elif int(select) == 3:
+        confirm_battle = input("You will be fighting low-level theives out in rich and disbandoned area. Continue?\n\n(1. Yes | 2. No): ")
+        if int(confirm_battle) == 1:
+
+            userHP = 100
+            thiefOneHP = 100
+            thiefTwoHP = 100
+            thiefThreeHP = 100
+
+            while userHP > 0:
+                if thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
+                    print('All targes have been defeated!')
+                    break
+                elif not thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
+                    bp.player()
+                    chooseTarget = input(f"Choose your target:\n\n1. Thief [{thiefOneHP}%]\n2. Thief [{thiefTwoHP}%]\n3. Thief [{thiefThreeHP}%]")
+
+                    if int(chooseTarget) == 1:
+                        focusTarget = thiefOneHP
+                    elif int(chooseTarget) == 2:
+                        focusTarget = thiefTwoHP
+                    elif int(chooseTarget) == 3:
+                        focusTarget = thiefThreeHP
+                    
+                    attackPrompt = input("1. Attack [sword-based]\n2. Forfeit\n3. Attack [bow-based]\n\n[{0}%] | {1}\n[{2}%] | {3}: ".format(thiefOneHP, p.npc.thief, userHP, username))
+
+                    if int(attackPrompt) == 1:
+                        selectSword = input("1. Iron sword\n2. Silver sword\n\nSelect sword: ")
+                        if int(selectSword) == 1:
+                            if iron_sword > 0:
+                                point_gain = random.randint(5, 7)
+                                iron_sword_damage = random.randint(15, 20)
+                                iron_sword_durability_loss = random.randint(10, 20)
+
+                                focusTarget = focusTarget - iron_sword_damage
+                                iron_sword_durability = iron_sword_durability - iron_sword_durability_loss
+                                battle_xp = battle_xp + 5
+                                points = points + point_gain
+
+                                print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.thief, naka_hp, point_gain, c.tcolors.reset))
+
+                                time.sleep(3)
+                                if focusTarget <= 0:
+                                    print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                elif not focusTarget <= 0:
+                                    damage = random.randint(3, 5)
+                                    userHP = userHP - damage
+
+                                    print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+
+                                    # End of battle.
+                            elif int(selectSword) == 2:
+                                if silver_sword > 0:
+                                    point_gain = random.randint(5, 7)
+                                    silver_sword_damage = random.randint(15, 20)
+                                    iron_sword_durability_loss = random.randint(10, 20)
+
+                                    focusTarget = focusTarget - silver_sword_damage
+                                    silver_sword_durability = silver_sword_durability - silver_sword_durability_loss
+                                    battle_xp = battle_xp + 5
+                                    points = points + point_gain
+
+                                    print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.thief, naka_hp, point_gain, c.tcolors.reset))
+
+                                    time.sleep(3)
+                                    if focusTarget <= 0:
+                                        print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                    elif not focusTarget <= 0:
+                                        damage = random.randint(3, 5)
+                                        userHP = userHP - damage
+
+                                        print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+
+                                        # End of battle.
+                    elif int(attackPrompt) == 2:
+                        if bow <= 0:
+                            print('{0}ERROR: You do not own a bow yet!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                        elif not bow <= 0:
+                            arrow_type = input("1. Regular\n2. Enhanced\n3. Tipped [Poison]\n\nSelect arrow type: ")
+                            if int(arrow_type) == 1:
+                                if arrows <= 0:
+                                    print('{0}ERROR: You do not have any arrows (regular)!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                                elif not arrows <= 0:
+                                    # pavedEdge_damage = random.randint(15, 30)
+                                    point_gain = random.randint(12, 25)
+                                    arrow_damage = random.randint(7, 14)
+                                    bow_durability_loss = random.randint(15, 25)
+                                    arrows = arrows - 1
+
+                                    focusTarget = focusTarget - arrow_damage
+                                    bow_durability = bow_durability - bow_durability_loss
+                                    battle_xp = battle_xp + 5
+                                    points = points + point_gain
+
+                                    print('{0}You attacked a thief using a bow [Regular arrows]!\Their health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, focusTarget, point_gain, c.tcolors.reset))
+
+                                    # Enemy phase.
+                                    time.sleep(3)
+                                    if focusTarget <= 0:
+                                        print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                    elif not focusTarget <= 0:
+                                        damage = random.randint(3, 5)
+                                        userHP = userHP - damage
+
+                                        print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+
+                                        # End of battle phase.
+                                elif int(arrow_type) == 2:
+                                    if enhanced_arrows <= 0:
+                                        print('{0}ERROR: You do not have any enhanced arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                                    elif not enhanced_arrows <= 0:
+                                        # pavedEdge_damage = random.randint(15, 30)
+                                        point_gain = random.randint(14, 25)
+                                        enhanced_arrow_damage = random.randint(12, 20)
+                                        bow_durability_loss = random.randint(15, 25)
+                                        enhanced_arrows = enhanced_arrows - 1
+
+                                        focusTarget = focusTarget - enhanced_arrow_damage
+                                        bow_durability = bow_durability - bow_durability_loss
+                                        battle_xp = battle_xp + 5
+                                        points = points + point_gain
+
+                                        print('{0}You attacked a thief using a bow [Enhanced arrows]!\Their health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, focusTarget, point_gain, c.tcolors.reset))
+
+                                        # Enemy phase.
+                                        time.sleep(3)
+
+                                        if focusTarget <= 0:
+                                            print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                        elif not focusTarget <= 0:
+                                            damage = random.randint(3, 5)
+                                            userHP = userHP - damage
+
+                                            print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+
+                                            # End of battle phase.
+                                elif int(arrow_type) == 3:
+                                    if tipped_arrows <= 0:
+                                        print('{0}ERROR: You do not have any tipped arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                                    elif not tipped_arrows <= 0:
+                                        # pavedEdge_damage = random.randint(15, 30)
+                                        point_gain = random.randint(14, 25)
+                                        tipped_arrow_damage = random.randint(10, 20)
+                                        bow_durability_loss = random.randint(15, 25)
+                                        tipped_arrows = tipped_arrows - 1
+                                        poison = random.randint(5, 10)
+
+                                        naka_hp = naka_hp - tipped_arrow_damage - poison
+                                        bow_durability = bow_durability - bow_durability_loss
+                                        battle_xp = battle_xp + 5
+                                        points = points + point_gain
+
+                                        print('{0}You attacked Lauren using a bow [Poison-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
+
+                                        # Enemy phase.
+                                        time.sleep(3)
+                                        if focusTarget <= 0:
+                                            print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                        elif not focusTarget <= 0:
+                                            damage = random.randint(3, 5)
+                                            userHP = userHP - damage
+
+                                            print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+
+                                            # End of battle phrase
+        elif int(confirm_battle) == 2:
+            print(f'{p.npc.lauren}: {c.tcolors.cyan}Very well then, take more time to prepare.{c.tcolors.reset}')
 
 
 
@@ -859,10 +1029,10 @@ def console():
 
 
 initiateProgram()
-bp = input("\nYour point balance (PB) is {}. Would you like to claim bonus points?\n(1. Yes | 2. No): ".format(points))
-if int(bp) == 1:
+bonusPoints = input("\nYour point balance (PB) is {}. Would you like to claim bonus points?\n(1. Yes | 2. No): ".format(points))
+if int(bonusPoints) == 1:
     bonus_points()
-elif int(bp) == 2:
+elif int(bonusPoints) == 2:
     print('\nYou declined the bonus points, your point balance is {}.'.format(points))
 
 console()
