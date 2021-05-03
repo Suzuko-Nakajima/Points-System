@@ -823,7 +823,7 @@ def battle():
                                 battle_xp = battle_xp + 5
                                 points = points + point_gain
 
-                                print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.thief, naka_hp, point_gain, c.tcolors.reset))
+                                print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.thief, focusTarget, point_gain, c.tcolors.reset))
 
                                 time.sleep(3)
                                 if focusTarget <= 0:
@@ -931,7 +931,7 @@ def battle():
                                     tipped_arrows = tipped_arrows - 1
                                     poison = random.randint(5, 10)
 
-                                    naka_hp = naka_hp - tipped_arrow_damage - poison
+                                    focusTarget = focusTarget - tipped_arrow_damage - poison
                                     bow_durability = bow_durability - bow_durability_loss
                                     battle_xp = battle_xp + 5
                                     points = points + point_gain
