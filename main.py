@@ -797,9 +797,9 @@ def battle():
                 if thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
                     print('All targets have been defeated!')
                     break
-                elif not thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
+                elif thiefOneHP > 0 and thiefTwoHP > 0 and thiefThreeHP > 0:
                     bp.player()
-                    chooseTarget = input(f"Choose your target:\n\n1. Thief [{thiefOneHP}%]\n2. Thief [{thiefTwoHP}%]\n3. Thief [{thiefThreeHP}%]")
+                    chooseTarget = input(f"\nChoose your target:\n\n1. Thief [{thiefOneHP}%]\n2. Thief [{thiefTwoHP}%]\n3. Thief [{thiefThreeHP}%]\n\n{username}: ")
 
                     if int(chooseTarget) == 1:
                         focusTarget = thiefOneHP
@@ -808,7 +808,7 @@ def battle():
                     elif int(chooseTarget) == 3:
                         focusTarget = thiefThreeHP
                     
-                    attackPrompt = input("1. Attack [sword-based]\n2. Forfeit\n3. Attack [bow-based]\n\n[{0}%] | {1}\n[{2}%] | {3}: ".format(thiefOneHP, p.npc.thief, userHP, username))
+                    attackPrompt = input("\n1. Attack [sword-based]\n2. Forfeit\n3. Attack [bow-based]\n\n[{0}%] | {1}\n[{2}%] | {3}: ".format(thiefOneHP, p.npc.thief, userHP, username))
 
                     if int(attackPrompt) == 1:
                         selectSword = input("1. Iron sword\n2. Silver sword\n\nSelect sword: ")
@@ -858,7 +858,7 @@ def battle():
                                         print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
 
                                         # End of battle.
-                    elif int(attackPrompt) == 2:
+                    elif int(attackPrompt) == 3:
                         if bow <= 0:
                             print('{0}ERROR: You do not own a bow yet!{1}'.format(c.tcolors.red, c.tcolors.reset))
                         elif not bow <= 0:
@@ -891,64 +891,64 @@ def battle():
                                         print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
 
                                         # End of battle phase.
-                                elif int(arrow_type) == 2:
-                                    if enhanced_arrows <= 0:
+                            elif int(arrow_type) == 2:
+                                if enhanced_arrows <= 0:
                                         print('{0}ERROR: You do not have any enhanced arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
-                                    elif not enhanced_arrows <= 0:
-                                        # pavedEdge_damage = random.randint(15, 30)
-                                        point_gain = random.randint(14, 25)
-                                        enhanced_arrow_damage = random.randint(12, 20)
-                                        bow_durability_loss = random.randint(15, 25)
-                                        enhanced_arrows = enhanced_arrows - 1
+                                elif not enhanced_arrows <= 0:
+                                    # pavedEdge_damage = random.randint(15, 30)
+                                    point_gain = random.randint(14, 25)
+                                    enhanced_arrow_damage = random.randint(12, 20)
+                                    bow_durability_loss = random.randint(15, 25)
+                                    enhanced_arrows = enhanced_arrows - 1
 
-                                        focusTarget = focusTarget - enhanced_arrow_damage
-                                        bow_durability = bow_durability - bow_durability_loss
-                                        battle_xp = battle_xp + 5
-                                        points = points + point_gain
+                                    focusTarget = focusTarget - enhanced_arrow_damage
+                                    bow_durability = bow_durability - bow_durability_loss
+                                    battle_xp = battle_xp + 5
+                                    points = points + point_gain
 
-                                        print('{0}You attacked a thief using a bow [Enhanced arrows]!\Their health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, focusTarget, point_gain, c.tcolors.reset))
+                                    print('{0}You attacked a thief using a bow [Enhanced arrows]!\Their health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, focusTarget, point_gain, c.tcolors.reset))
 
-                                        # Enemy phase.
-                                        time.sleep(3)
+                                    # Enemy phase.
+                                    time.sleep(3)
 
-                                        if focusTarget <= 0:
-                                            print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
-                                        elif not focusTarget <= 0:
-                                            damage = random.randint(3, 5)
-                                            userHP = userHP - damage
+                                    if focusTarget <= 0:
+                                        print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                    elif not focusTarget <= 0:
+                                        damage = random.randint(3, 5)
+                                        userHP = userHP - damage
 
-                                            print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+                                        print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
 
-                                            # End of battle phase.
-                                elif int(arrow_type) == 3:
-                                    if tipped_arrows <= 0:
-                                        print('{0}ERROR: You do not have any tipped arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
-                                    elif not tipped_arrows <= 0:
-                                        # pavedEdge_damage = random.randint(15, 30)
-                                        point_gain = random.randint(14, 25)
-                                        tipped_arrow_damage = random.randint(10, 20)
-                                        bow_durability_loss = random.randint(15, 25)
-                                        tipped_arrows = tipped_arrows - 1
-                                        poison = random.randint(5, 10)
+                                        # End of battle phase.
+                            elif int(arrow_type) == 3:
+                                if tipped_arrows <= 0:
+                                    print('{0}ERROR: You do not have any tipped arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
+                                elif not tipped_arrows <= 0:
+                                    # pavedEdge_damage = random.randint(15, 30)
+                                    point_gain = random.randint(14, 25)
+                                    tipped_arrow_damage = random.randint(10, 20)
+                                    bow_durability_loss = random.randint(15, 25)
+                                    tipped_arrows = tipped_arrows - 1
+                                    poison = random.randint(5, 10)
 
-                                        naka_hp = naka_hp - tipped_arrow_damage - poison
-                                        bow_durability = bow_durability - bow_durability_loss
-                                        battle_xp = battle_xp + 5
-                                        points = points + point_gain
+                                    naka_hp = naka_hp - tipped_arrow_damage - poison
+                                    bow_durability = bow_durability - bow_durability_loss
+                                    battle_xp = battle_xp + 5
+                                    points = points + point_gain
 
-                                        print('{0}You attacked Lauren using a bow [Poison-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
+                                    print('{0}You attacked Lauren using a bow [Poison-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, naka_hp, point_gain, c.tcolors.reset))
 
-                                        # Enemy phase.
-                                        time.sleep(3)
-                                        if focusTarget <= 0:
-                                            print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
-                                        elif not focusTarget <= 0:
-                                            damage = random.randint(3, 5)
-                                            userHP = userHP - damage
+                                    # Enemy phase.
+                                    time.sleep(3)
+                                    if focusTarget <= 0:
+                                        print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                    elif not focusTarget <= 0:
+                                        damage = random.randint(3, 5)
+                                        userHP = userHP - damage
 
-                                            print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+                                        print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
 
-                                            # End of battle phrase
+                                        # End of battle phrase
         elif int(confirm_battle) == 2:
             print(f'{p.npc.lauren}: {c.tcolors.cyan}Very well then, take more time to prepare.{c.tcolors.reset}')
 
