@@ -835,29 +835,33 @@ def battle():
                                     print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
 
                                     # End of battle.
-                            elif int(selectSword) == 2:
-                                if silver_sword > 0:
-                                    point_gain = random.randint(5, 7)
-                                    silver_sword_damage = random.randint(15, 20)
-                                    iron_sword_durability_loss = random.randint(10, 20)
+                            elif iron_sword <= 0:
+                                print(f'{c.tcolors.red}ERROR: You do not own an iron sword yet!{c.tcolors.reset}') 
+                        elif int(selectSword) == 2:
+                            if silver_sword > 0:
+                                point_gain = random.randint(5, 7)
+                                silver_sword_damage = random.randint(15, 20)
+                                silver_sword_durability_loss = random.randint(10, 20)
 
-                                    focusTarget = focusTarget - silver_sword_damage
-                                    silver_sword_durability = silver_sword_durability - silver_sword_durability_loss
-                                    battle_xp = battle_xp + 5
-                                    points = points + point_gain
+                                focusTarget = focusTarget - silver_sword_damage
+                                silver_sword_durability = silver_sword_durability - silver_sword_durability_loss
+                                battle_xp = battle_xp + 5
+                                points = points + point_gain
 
-                                    print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.thief, focusTarget, point_gain, c.tcolors.reset))
+                                print('{0}You attacked {1} using an iron sword!\Lauren\'s health points: {2}\n+{3} points!{4}'.format(c.tcolors.yellow, p.npc.thief, focusTarget, point_gain, c.tcolors.reset))
 
-                                    time.sleep(3)
-                                    if focusTarget <= 0:
-                                        print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
-                                    elif not focusTarget <= 0:
-                                        damage = random.randint(3, 5)
-                                        userHP = userHP - damage
+                                time.sleep(3)
+                                if focusTarget <= 0:
+                                    print(f'{c.tcolors.redHighlight} This target has been defeated! {c.tcolors.reset}\nThief 1: [{thiefOneHP}%]')
+                                elif not focusTarget <= 0:
+                                    damage = random.randint(3, 5)
+                                    userHP = userHP - damage
 
-                                        print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
+                                    print(f'{c.tcolors.grey}A thief attacked you with a wooden plank.\nDamage dealt: {damage}%{c.tcolors.reset}')
 
-                                        # End of battle.
+                                    # End of battle.
+                            elif silver_sword <= 0:
+                                    print(f'{c.tcolors.red}You do not own a silver sword yet!{c.tcolors.reset}')
                     elif int(attackPrompt) == 3:
                         if bow <= 0:
                             print('{0}ERROR: You do not own a bow yet!{1}'.format(c.tcolors.red, c.tcolors.reset))
@@ -936,7 +940,7 @@ def battle():
                                     battle_xp = battle_xp + 5
                                     points = points + point_gain
 
-                                    print('{0}You attacked Lauren using a bow [Poison-tipped arrows]!\Lauren\'s health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, focusTarget, point_gain, c.tcolors.reset))
+                                    print('{0}You attacked a thief using a bow [Poison-tipped arrows]!\Their health points: {1}%\n+{2} points!{3}'.format(c.tcolors.yellow, focusTarget, point_gain, c.tcolors.reset))
 
                                     # Enemy phase.
                                     time.sleep(3)
