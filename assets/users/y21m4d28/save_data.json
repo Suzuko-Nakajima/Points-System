@@ -1,8 +1,8 @@
 {
     "arrows": 52,
-    "battle xp": 605,
+    "battle xp": 675,
     "bow": 1,
-    "bow durability": 896,
+    "bow durability": 649,
     "enhanced arrows": 39,
     "healing aura": 3,
     "healing aura stock": 21,
@@ -11,11 +11,11 @@
     "logout dialogue": 0,
     "username": "Nakajima, Suzuko",
     "points": 0,
-    "deposit": 2766,
+    "deposit": 3180,
     "luck": 10,
     "silver sword": 1,
-    "silver sword durability": 1626,
+    "silver sword durability": 1584,
     "slash command prefix": "/",
-    "stamina points": 100,
-    "tipped arrows": 71
+    "stamina points": 86.82503692207985,
+    "tipped arrows": 59
 }

@@ -793,6 +793,9 @@ def battle():
             while userHP > 0:
                 if thiefOneHP <= 0 and thiefTwoHP <= 0 and thiefThreeHP <= 0:
                     print('All targets have been defeated!')
+                    lvlI_points = 20
+                    points = points + lvlI_points
+                    print(f'+{lvlI_points} points for level completion!')
                     break
                 elif thiefOneHP > 0 or thiefTwoHP > 0 or thiefThreeHP > 0:
                     time.sleep(2)
@@ -841,8 +844,8 @@ def battle():
                             selectSword = input("1. Iron sword\n2. Silver sword\n\nSelect sword: ")
                             if int(selectSword) == 1:
                                 if iron_sword > 0:
-                                    point_gain = random.randint(5, 7)
-                                    iron_sword_damage = random.randint(15, 20)
+                                    point_gain = random.randint(4, 7)
+                                    iron_sword_damage = random.randint(20, 30)
                                     iron_sword_durability_loss = random.randint(10, 20)
 
                                     if int(chooseTarget) == 1:
@@ -878,7 +881,7 @@ def battle():
                             elif int(selectSword) == 2:
                                 if silver_sword > 0:
                                     point_gain = random.randint(5, 7)
-                                    silver_sword_damage = random.randint(15, 20)
+                                    silver_sword_damage = random.randint(30, 50)
                                     silver_sword_durability_loss = random.randint(10, 20)
 
                                     if int(chooseTarget) == 1:
@@ -923,8 +926,8 @@ def battle():
                                         time.sleep(2)
                                     elif not arrows <= 0:
                                         # pavedEdge_damage = random.randint(15, 30)
-                                        point_gain = random.randint(12, 25)
-                                        arrow_damage = random.randint(7, 14)
+                                        point_gain = random.randint(7, 10)
+                                        arrow_damage = random.randint(15, 30)
                                         bow_durability_loss = random.randint(15, 25)
                                         arrows = arrows - 1
 
@@ -962,8 +965,8 @@ def battle():
                                             print('{0}ERROR: You do not have any enhanced arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
                                     elif not enhanced_arrows <= 0:
                                         # pavedEdge_damage = random.randint(15, 30)
-                                        point_gain = random.randint(14, 25)
-                                        enhanced_arrow_damage = random.randint(12, 20)
+                                        point_gain = random.randint(10, 12)
+                                        enhanced_arrow_damage = random.randint(20, 35)
                                         bow_durability_loss = random.randint(15, 25)
                                         enhanced_arrows = enhanced_arrows - 1
 
@@ -1002,8 +1005,8 @@ def battle():
                                         print('{0}ERROR: You do not have any tipped arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
                                     elif not tipped_arrows <= 0:
                                         # pavedEdge_damage = random.randint(15, 30)
-                                        point_gain = random.randint(14, 25)
-                                        tipped_arrow_damage = random.randint(10, 20)
+                                        point_gain = random.randint(12, 14)
+                                        tipped_arrow_damage = random.randint(35, 45)
                                         bow_durability_loss = random.randint(15, 25)
                                         tipped_arrows = tipped_arrows - 1
                                         poison = random.randint(5, 10)
