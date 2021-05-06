@@ -31,6 +31,8 @@ sign_in_id = None
 
 charlimit = 16
 
+gender = None
+
 enhanced_arrows = 0
 
 healing_aura = 0
@@ -71,6 +73,7 @@ def sign_in_function():
     global bow
     global bow_durability
     global arrows
+    global gender
     sign_in_option = input("Choose (1. Sign-in | 2. Sign-up): ")
     if int(sign_in_option) == 1:
         sign_in_id = input("[Sign-in] | Enter sign-in ID: ")
@@ -137,6 +140,13 @@ def sign_in_function():
                 print(f"\n{c.tcolors.green}[Guide obtained: Luaren]\n{c.tcolors.reset}")
                 time.sleep(10)
                 print(f"{c.tcolors.red}NOTICE: If your stamina points drop to 0, you will no longer be able to sign into your make-shift account!{c.tcolors.reset}")
+
+                gender = input(f"Choose a gender ({c.tcolors.red}CRITICAL:{c.tcolors.reset} This choice will affect the program!)\n\n(1. {c.tcolors.blue}Male{c.tcolors.reset} | 2. {c.tcolors.purple}Female{c.tcolors.reset})\n")
+
+                if int(gender) == 1:
+                    gender = "Male"
+                elif int(gender) == 2:
+                    gender = "Female"
     
 
 
@@ -193,6 +203,15 @@ def depos():
 
         print('\nPoint balance: {0}\nDeposited: {1}\n'.format(points, deposit))
 
+def deposAll():
+    global points
+    global deposit
+
+    print(f'\n-{points} points!\n+{points} points added to deposit!\n')
+
+    deposit = deposit + points
+    points = points - points
+
 def withdraw():
     global points
     global deposit
@@ -207,6 +226,18 @@ def withdraw():
         points = points + int(withdraw_from_bank)
         deposit = deposit - int(withdraw_from_bank)
         print('\nYour current point balance: {0}\nYour deposited points: {1}\n'.format(points, deposit))
+
+def withdrawAll():
+    global points
+    global deposit
+
+    print(f'\n-{deposit} points from deposit!\n+{deposit} points!\n')
+
+    try:
+        points = points + deposit
+        deposit = deposit - deposit
+    except Exception as e:
+        print(f'{str(e)}')
 
 def gift_code():
     global username
@@ -228,7 +259,7 @@ def gift_code():
             print('This is not a valid gift code!')
 
 def command_help():
-    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}battle - begin battling for experience!\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}gift - Enter a gift code to receive some points.\n{0}inventory - View your inventory.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on sign-in ID).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}use - Use any items in your inventory.\n{0}withdraw - Withdraw your points.\n'.format(slash))
+    print('\nAvailable commands:\n{0}balance - Check your point balance and deposited points.\n{0}battle - begin battling for experience!\n{0}claim - Claim 50 points.\n{0}deposit - Deposit your points.\n{0}depall - Deposits all your points.\n{0}gift - Enter a gift code to receive some points.\n{0}inventory - View your inventory.\n{0}load - Load your saved data (data is based on username).\n{0}logout - Closes the program.\n{0}uuid - View your unique ID.\n{0}uun - Update your username.\n{0}purchase - Purchase an item.\n{0}save - Save your data (data is based on sign-in ID).\n{0}shop - View a list of items in the shop.\n{0}update_slash - Updates the current slash command. | NOTE: When you update the prefix, do not forget it!\n{0}update_password - Update your current password to a new password.\n{0}use - Use any items in your inventory.\n{0}withdraw_all - Withdraws all your points.\n{0}withdraw - Withdraw your points.\n'.format(slash))
 
 def save_data():
     if not os.path.exists('assets/users/{}'.format(sign_in_id)):
@@ -243,6 +274,7 @@ def save_data():
             "bow": bow,
             "bow durability": bow_durability,
             "enhanced arrows": enhanced_arrows,
+            "gender": gender,
             "healing aura": healing_aura,
             "healing aura stock": healing_aura_stock,
             "iron sword": iron_sword,
@@ -269,6 +301,7 @@ def load_data():
     global bow
     global bow_durability
     global enhanced_arrows
+    global gender
     global healing_aura
     global healing_aura_stock
     global iron_sword
@@ -299,6 +332,7 @@ def load_data():
             bow = data['bow']
             bow_durability = data['bow durability']
             enhanced_arrows = data['enhanced arrows']
+            gender = data['gender']
             healing_aura = data['healing aura']
             healing_aura_stock = data['healing aura stock']
             iron_sword = data['iron sword']
@@ -430,6 +464,7 @@ def uun():
                     "bow": json_saveData['bow'],
                     "bow durability": json_saveData['bow durability'],
                     "enhanced arrows": json_saveData['enhanced arrows'],
+                    "gender": json_saveData['gender'],
                     "healing aura": json_saveData['healing aura'],
                     "healing aura stock": json_saveData['healing aura stock'],
                     "iron sword": json_saveData['iron sword'],
@@ -474,11 +509,13 @@ def purchase():
     purchase_command_line = input("Know the item you want to purchase.\nPurchase item: ")
     if int(purchase_command_line) == 1:
         item = "Healing Aura"
+        amount = int(input("Enter the amount you want to purchase.\n{}: ".format(username)))
+
         if healing_aura_stock < 1:
             print('\n{0}ERROR: This item is out of stock!{1}'.format(c.tcolors.red, c.tcolors.reset))
-        elif points < 75:
+        elif points < 75 * amount:
             print('\n{0}ERROR: You do not have a sufficient amount of funds!{1}\n'.format(c.tcolors.red, c.tcolors.reset))
-        elif not healing_aura_stock < 1 and not points < 75:
+        elif not healing_aura_stock < 1 and not points < 75 * amount:
             healing_aura_stock = healing_aura_stock - 1
             healing_aura = healing_aura + 1
             points = points - 75
@@ -718,7 +755,7 @@ def battle():
                                 print('{0}ERROR: You do not have any arrows (regular)!{1}'.format(c.tcolors.red, c.tcolors.reset))
                             elif not arrows <= 0:
                                 # pavedEdge_damage = random.randint(15, 30)
-                                point_gain = random.randint(12, 25)
+                                point_gain = random.randint(12, 18)
                                 arrow_damage = random.randint(7, 14)
                                 bow_durability_loss = random.randint(15, 25)
                                 arrows = arrows - 1
@@ -737,7 +774,7 @@ def battle():
                                 print('{0}ERROR: You do not have any enhanced arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
                             elif not enhanced_arrows <= 0:
                                 # pavedEdge_damage = random.randint(15, 30)
-                                point_gain = random.randint(14, 25)
+                                point_gain = random.randint(14, 20)
                                 enhanced_arrow_damage = random.randint(12, 20)
                                 bow_durability_loss = random.randint(15, 25)
                                 enhanced_arrows = enhanced_arrows - 1
@@ -756,7 +793,7 @@ def battle():
                                  print('{0}ERROR: You do not have any tipped arrows!{1}'.format(c.tcolors.red, c.tcolors.reset))
                             elif not tipped_arrows <= 0:
                                 # Player phase
-                                point_gain = random.randint(14, 25)
+                                point_gain = random.randint(16, 20)
                                 tipped_arrow_damage = random.randint(10, 20)
                                 bow_durability_loss = random.randint(15, 25)
                                 tipped_arrows = tipped_arrows - 1
@@ -844,7 +881,7 @@ def battle():
                             selectSword = input("1. Iron sword\n2. Silver sword\n\nSelect sword: ")
                             if int(selectSword) == 1:
                                 if iron_sword > 0:
-                                    point_gain = random.randint(4, 7)
+                                    point_gain = random.randint(3, 5)
                                     iron_sword_damage = random.randint(20, 30)
                                     iron_sword_durability_loss = random.randint(10, 20)
 
@@ -880,7 +917,7 @@ def battle():
                                     print(f'{c.tcolors.red}ERROR: You do not own an iron sword yet!{c.tcolors.reset}') 
                             elif int(selectSword) == 2:
                                 if silver_sword > 0:
-                                    point_gain = random.randint(5, 7)
+                                    point_gain = random.randint(3, 5)
                                     silver_sword_damage = random.randint(30, 50)
                                     silver_sword_durability_loss = random.randint(10, 20)
 
@@ -926,7 +963,7 @@ def battle():
                                         time.sleep(2)
                                     elif not arrows <= 0:
                                         # pavedEdge_damage = random.randint(15, 30)
-                                        point_gain = random.randint(7, 10)
+                                        point_gain = random.randint(5, 7)
                                         arrow_damage = random.randint(15, 30)
                                         bow_durability_loss = random.randint(15, 25)
                                         arrows = arrows - 1
@@ -1133,9 +1170,17 @@ def console():
             # Update username.
             uun()
         elif terminal == slash + 'inventory':
+            # View inventory.
             inventory()
         elif terminal == slash + 'use':
+            # Use inventory items.
             use_item()
+        elif terminal == slash + 'depall':
+            # Deposit all points.
+            deposAll()
+        elif terminal == slash + 'withdraw_all':
+            # Withdraw all points.
+            withdrawAll()
 
 
 
