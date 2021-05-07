@@ -37,8 +37,6 @@ enhanced_arrows = 0
 
 healing_aura = 0
 
-healing_aura_stock = 50
-
 iron_sword = 0
 
 iron_sword_durability = 0
@@ -63,7 +61,6 @@ def sign_in_function():
     global deposit
     global enhanced_arrows
     global healing_aura
-    global healing_aura_stock
     global iron_sword
     global iron_sword_durability
     global stamina_points
@@ -141,7 +138,7 @@ def sign_in_function():
                 time.sleep(10)
                 print(f"{c.tcolors.red}NOTICE: If your stamina points drop to 0, you will no longer be able to sign into your make-shift account!{c.tcolors.reset}")
 
-                gender = input(f"Choose a gender ({c.tcolors.red}CRITICAL:{c.tcolors.reset} This choice will affect the program!)\n\n(1. {c.tcolors.blue}Male{c.tcolors.reset} | 2. {c.tcolors.purple}Female{c.tcolors.reset})\n")
+                gender = input(f"Choose a gender ({c.tcolors.red}CRITICAL:{c.tcolors.reset} This choice will affect the program!)\n\n(1. {c.tcolors.blue}Male{c.tcolors.reset} | 2. {c.tcolors.purple}Female{c.tcolors.reset}): ")
 
                 if int(gender) == 1:
                     gender = "Male"
@@ -276,7 +273,6 @@ def save_data():
             "enhanced arrows": enhanced_arrows,
             "gender": gender,
             "healing aura": healing_aura,
-            "healing aura stock": healing_aura_stock,
             "iron sword": iron_sword,
             "iron sword durability": iron_sword_durability,
             "logout dialogue": logout_dialogue,
@@ -303,7 +299,6 @@ def load_data():
     global enhanced_arrows
     global gender
     global healing_aura
-    global healing_aura_stock
     global iron_sword
     global iron_sword_durability
     global username
@@ -334,7 +329,6 @@ def load_data():
             enhanced_arrows = data['enhanced arrows']
             gender = data['gender']
             healing_aura = data['healing aura']
-            healing_aura_stock = data['healing aura stock']
             iron_sword = data['iron sword']
             iron_sword_durability = data['iron sword durability']
             logout_dialogue = data['logout dialogue']
@@ -399,7 +393,6 @@ def logout():
     global bow_durability
     global enhanced_arrows
     global healing_aura
-    global healing_aura_stock
     global iron_sword
     global iron_sword_durability
     global username
@@ -498,7 +491,6 @@ def purchase():
     global bow_durability
     global enhanced_arrows
     global healing_aura
-    global healing_aura_stock
     global iron_sword
     global iron_sword_durability
     global points
@@ -511,16 +503,14 @@ def purchase():
         item = "Healing Aura"
         amount = int(input("Enter the amount you want to purchase.\n{}: ".format(username)))
 
-        if healing_aura_stock < 1:
-            print('\n{0}ERROR: This item is out of stock!{1}'.format(c.tcolors.red, c.tcolors.reset))
-        elif points < 75 * amount:
+        if points < 75 * amount:
             print('\n{0}ERROR: You do not have a sufficient amount of funds!{1}\n'.format(c.tcolors.red, c.tcolors.reset))
-        elif not healing_aura_stock < 1 and not points < 75 * amount:
-            healing_aura_stock = healing_aura_stock - 1
-            healing_aura = healing_aura + 1
-            points = points - 75
+        elif not points < 75 * amount:
+            healing_aura = healing_aura + amount
+            spent = 75 * amount
+            points = points - spent
 
-            print('-75 points!\nThank you for your purchase, {0}!\n+1 {1}'.format(username, item))
+            print(f'-{amount * 75} points!\nThank you for your purchase, {username}!\n+{amount} {item}')
     elif int(purchase_command_line) == 2:
         item_iron_sword = "Iron sword"
         if points < 150:
@@ -660,7 +650,12 @@ def battle():
     select = input("\nSelect a battle option!\n\n{}: ".format(username))
 
     if int(select) == 1:
-        print('\n{0}{2}: Wanting to train against me, huh? Very well then, suppose i cannot back down now.{1}\n'.format(c.tcolors.cyan, c.tcolors.reset, p.npc.lauren))
+        if gender == "Male":
+            print(f'\n{c.tcolors.cyan}{p.npc.lauren}: Wanting to train against me, eh? A man such as yourself should prepare for this, I will not hold back!{c.tcolors.reset}\n')
+        elif gender == "Female":
+            print(f'\n{c.tcolors.cyan}{p.npc.lauren}: I rather not fight against other women, but if you insist, I shall not hold back!{c.tcolors.reset}\n')
+        elif gender == None:
+            print(f'{c.tcolors.cyan}{p.npc.lauren}: I cannot even begin with you, let\'s end this quickly!{c.tcolors.reset}')
 
         training_hp = 100
         naka_hp = 100
@@ -853,7 +848,6 @@ def battle():
                         global bow_durability
                         global enhanced_arrows
                         global healing_aura
-                        global healing_aura_stock
                         global iron_sword
                         global iron_sword_durability
                         global username
